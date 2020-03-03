@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style type="text/css">
+			
+		</style>
+		<script src="./static/js/d3.js"></script>
+		<!-- <script src="js/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script> -->
+	</head>
+	<body>
+		<svg height='600' width='1000'></svg>
+		
+
+
+         <script>
+            var nodes = [
+                {main:"allen walker"},
+                {main:"mushroom"},
+                {main:"masayume"},
+                {main:"jojo"},
+                {main:"fujiyokan"},
+                {main:"F.F."}
+            ];
+
+            var edges = [
+                {source:0,target:2,relation:"typeA"},
+                {source:0,target:4,relation:"typeA"},
+                {source:0,target:5,relation:"typeA"},
+                {source:1,target:3,relation:"typeA"},
+                {source:1,target:2,relation:"typeC"},
+                {source:4,target:5,relation:"typeA"},
+                {source:3,target:4,relation:"typeB"},
+                {source:3,target:2,relation:"typeB"},
+                {source:3,target:0,relation:"typeA"},
+                {source:5,target:2,relation:"typeA"}
+
+            ];
+
+            function ticked(){
+                links.attr("x1",function(d,i){
+                    return d.source.x;
+                }).attr("y1", function(d,i){
+                    return d.source.y;
+                }).attr("x2" , function(d,i){
+                    return d.target.x;
+                }).attr("y2" , function(d,i){
+                    return d.target.y;
+                })
+
+                linksText.attr("x" , function(d,i){
+                    return (d.source.x+d.target.x) / 2;
+                }).attr("y", function(d,i){
+                    return (d.source.y + d.target.y) / 2;
+                }).attr("transform", function(d){
+                    return "rotate("+Math.atan2(Math.abs(d.target.y-d.source.y) , Math.abs(d.target.x-d.source.x))*180/Math.PI+","+(d.source.x+d.target.x) / 2+","+(d.source.y + d.target.y) / 2+")";
+                })
+
+                gs.attr("transform" , function(d, i){
+                    return "translate("+ d.x+","+d.y+")";
+                })
+            }
+            function started(d){
+                forceSimu.alpha(1).restart();
+                d.fx = d.x;
+                d.fy = d.y;
+            }
+            function dragged(d){
+                d.fx = d3.event.x;
+                d.fy = d3.event.y;
+            }
+            function ended(d){
+                d.fx = null;
+                d.fy = null;
+            }
+            var svg = d3.select("svg");
+            var width = svg.attr("width");
+            var height = svg.attr("height");
+
+            var forceSimu = d3.forceSimulation()
+                              .force("link" , d3.forceLink())
+                              .force("charge", d3.forceManyBody())
+                              .force("center",d3.forceCenter())
+                              .force("collision" , d3.forceCollide(70))
+            forceSimu.nodes(nodes).on("tick",ticked);
+
+            // forceSimu.force("charge").distanceMax(100)
+
+            forceSimu.force("link").links(edges);
+
+            forceSimu.force("center").x(width/2).y(height/2);
+
+            console.log(nodes);
+            console.log(edges);
+
+            var links = svg.append("g")
+                .selectAll("line")
+                .data(edges)
+                .enter()
+                .append("line")
+                .attr("stroke" , "#757474")
+                .attr("stroke-width" , 1)
+
+            var linksText = svg.append("g")
+                .selectAll("text")
+                .data(edges)
+                .enter()
+                .append("text")
+                .style("text-anchor", "middle")
+                .text(function(d,i){
+                    return d.relation;
+                });
+
+            
+            var gs = svg.selectAll(".circeTe")
+                        .data(nodes)
+                        .enter()
+                        .append("g")
+                        .attr("transform" , function(d, i){
+                            return "translate("+ d.x+","+d.y+")";
+                        })
+                        .call(d3.drag()
+                            .on("start" , started)
+                            .on("drag" , dragged)
+                            .on("end" , ended)
+                        )
+
+            gs.append("image")
+              .attr("xlink:href","./static/module.png")
+              .attr("width",40)
+
+            gs.append("text")
+              .style("text-anchor", "middle")
+              .attr("x" , 20)
+              .attr("y",45)
+              .text(function(d,i){
+                  return d.main;
+              })
+
+              gs.on("click", function(d){
+                  alert(d.index)
+              });
+         </script>
+	</body>
+</html>

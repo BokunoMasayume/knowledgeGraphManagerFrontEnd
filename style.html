@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>tool main</title>
+    <style>
+    html,body, #app{
+        height: 100%;
+        width:100%;
+        margin:0;
+        padding:0;
+        overflow: hidden;
+
+    }
+    #titleBar{
+        height: 6%;
+        /* width:100%; */
+        background-color: rgba(0, 0, 0, 0.911);
+        color:aliceblue;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding:0 20px ;
+    }
+    #titleBar>span:first-child{
+        font-size: large;
+        font-weight: 600;
+    }
+    #titleBar>img{
+        height: 90%;
+        cursor: pointer;
+    }
+    #menuBar{
+        height: 4%;
+        padding:0 0;
+        background-color: rgba(5, 26, 48, 0.911);
+        color:rgb(200, 201, 201);
+        display:flex;
+        align-items: stretch;
+        justify-content: flex-start;
+    }
+    #menuBar>span{
+        margin: 0;
+        /* margin-left:17px; */
+        padding:5px 10px;
+        cursor: pointer;
+        /* line-height: 100%; */
+    }
+    #menuBar>span:hover{
+        background-color: rgb(0, 16, 31);
+    }
+    #body{
+        height:91%;
+        background-color: white;
+        display: flex;
+
+        padding:0 35px;
+
+        
+    }
+
+    #lsideBar{
+        background-color: rgb(4, 10, 17);
+        width: 45px;
+        display:flex;
+        position: absolute;
+        left:0;
+        top:10%;
+        height:100%;
+
+        flex-direction: column;
+        align-items: center;
+
+        padding: 10px 0;
+
+        z-index: 100;
+
+
+    }
+    #lsideBar>div{
+        /* margin-top:20px; */
+        width:100%;
+        padding:15px 0;
+        display:flex;
+        align-items: center;
+        flex-direction: column;
+
+        align-content: space-around;
+    }
+
+    #quickMod{
+        padding-top: 20px;
+        /* flex :20; */
+        height:60%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: center;
+    }
+    #quickMod>div{
+        width:40px;
+        background-color: brown;
+        margin-bottom: 7px;
+        border-radius: 50%;
+        /* clip-path: circle(50%); */
+        
+    }
+    #quickMod>div img{
+        height:40px;
+    }
+    #quickMod>div:hover{
+        background-color: rgb(242, 243, 250);
+        cursor: pointer;
+
+    }
+    
+    #lsideBar img{
+        display:block;
+        height:25px;
+    }
+    #lsideBar>div:not(:last-child):hover{
+        background-color: rgb(0, 16, 31);
+        cursor: pointer;
+
+    }
+    
+
+    #ldrawer{
+        /* width: 250px; */
+        /* flex:4; */
+        background-color: rgb(0, 16, 31);
+        transition:400ms width;
+
+        margin-left: 10px;
+        position: relative;
+
+        color:rgb(126, 148, 167);
+
+        /* animation:drawerPull 1s ease 0s ; */
+    }
+    /* #ldrawer:hover{
+        width: 2%;
+        transition:1s width;
+    
+    } */
+    
+
+    #ldrawerContent{
+        position: absolute;
+        right: 0;
+        top:0;
+        bottom:0;
+        width:250px;
+        /* overflow:scroll; */
+        /* overflow-y:scroll; */
+    }
+
+    #fileTree{
+        /* background-color: aqua; */
+        height: 100%;
+        /* display:none; */
+        
+    }
+    #fileTree h4{
+        background-color: rgb(3, 12, 20);
+        padding:5px 0;
+        padding-left: 5px;
+        margin: 0;
+        
+    }
+    #fileTree h4:hover{
+        background-color: rgb(34, 94, 146);
+        color: aliceblue;
+        cursor: pointer;
+    }
+    li{
+        list-style-type: none;
+        padding:3px 0;
+    }
+    #fileTree li:hover{
+        background-color: rgb(34, 94, 146);
+        color: aliceblue;
+        cursor: pointer;
+    }
+    .folderWrapper{
+        padding:0;
+    }
+    
+    .folderBody{
+        /* margin-left:9px; */
+        padding:5px 0;
+        padding-left:15px;
+    }
+    #moduleContent{
+        height:100%;
+        /* background-color: azure; */
+
+        display:flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+        align-content: flex-start;
+        justify-content: flex-start;
+
+        padding:5px;
+    }
+    #moduleContent>div{
+        /* flex: 1; */
+        width: 50px;
+        padding:5px;
+        border-radius: 5px;
+        color:rgb(37, 29, 70);
+    }
+    #moduleContent>div:hover{
+        background-color: rgb(192, 203, 214);
+    }
+    #moduleContent img{
+        width:50px;
+    }
+    #searchContent{
+        height:100%;
+        /* background-color: blue; */
+    }
+    #search{
+        width:99%;
+        /* border-radius: 0 0 0 5px; */
+        height:30px;
+
+        background-color: rgb(0, 16, 31);
+        border:none;
+        border-bottom: 1px solid rgb(0, 3, 5);
+
+        box-shadow: inset 0 -5px 6px -6px rgb(19, 2, 34);
+
+
+        outline: none;
+
+        color: aliceblue;
+        letter-spacing: 2px;
+    }
+    #search:focus{
+        box-shadow: inset 0 -5px 6px -6px white;
+
+    }
+
+    /* @keyframes drawerPush{
+        0% {width:17%;}
+        100% {width:2%;}
+    }
+    @keyframes drawerPull{
+        0% {width:2%;}
+
+        100% {width:17%;}
+    } */
+
+    #workSpace{
+        /* width: fit-content; */
+        flex:1;
+        background-color:rgb(255, 255, 255);
+        position: relative;
+        /* background-color: rgb(0, 6, 12); */
+    }
+    .node{
+        position:absolute;
+        width:40px;
+        height: 40px;
+        clip-path: circle(50%);
+        background-color: brown;
+
+        z-index:0;
+    }
+    .node>img{
+        width:100%;
+        height:100%;
+    }
+    #rdrawer{
+        width: 250px;
+
+        /* width: 17%; */
+        /* flex:4; */
+        background-color: rgb(1, 23, 44);
+
+        transition:1s width;
+        /* display: none; */
+
+        padding:10px 0;
+
+        z-index:100;
+    }
+    #rdrawer h3{
+        text-align: center;
+        margin:0;
+        padding:10px 0;
+
+        letter-spacing: 5px;
+
+        color:rgb(97, 98, 99);
+
+
+    }
+    #rdrawer h3:hover{
+        background-color: rgb(2, 33, 59);
+        color:aliceblue;
+    }
+    #moduleView>div{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        padding:10px 5px;
+        background-color: rgb(0, 40, 75);
+    }
+    #moduleView>div div{
+        background-color: brown;
+        padding:6px;
+
+        margin-bottom: 20px;
+        cursor: default;
+    }
+
+    #propertyContent>div{
+        background-color: rgb(0, 40, 75);
+        padding: 10px 5px;
+
+    }
+
+    #propertyContent>div>div{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-around;
+
+        color:beige;
+
+
+        /* background-color: blueviolet; */
+    }
+    /* #propertyContent>div>div>*{
+        display: block;
+    } */
+    #propertyContent input{
+        width: 60px;
+        outline: none;
+        border: 0;
+
+        background-color: rgb(0, 40, 75);
+        color:beige;
+
+
+    }
+    #propertyContent input:focus{
+        box-shadow: inset 0 -3px 3px -3px white;
+    }
+    #propertyContent select{
+        background-color: rgb(0, 40, 75);
+        padding:4px;
+        border:0;
+        color:white;
+    }
+    #rsideBar{
+        width: 35px;
+        background-color: rgb(4, 10, 17);
+        text-align: center;
+        color:rgb(104, 104, 104);
+        font-size: larger;
+        padding-top:4%;
+
+        position: absolute;
+        right:0;
+        top:10%;
+        height:100%;
+
+        z-index: 100;
+    }
+
+
+    .focus{
+        background-color: rgb(0, 16, 31);
+    }
+
+    .hide{
+        display:none;
+    }
+
+    .ldrawerHidden{
+        width:0;
+        /* transition:width; */
+    }
+    .ldrawerShow{
+        width: 250px;
+    }
+
+    
+    
+    
+    </style>
+</head>
+<body>
+    <div id="app">
+    <div id="titleBar">
+        <span>firstTestFile</span>
+        <img src="./static/avatar.png" >
+    </div>
+
+    <div id="menuBar">
+        <span>
+            File
+        </span>
+        <span>
+            Edit
+        </span>
+        <span>
+            View
+        </span>
+        <span>
+            Setting
+        </span>
+        <span>
+            Help
+        </span>
+
+    </div>
+
+    <div id="body">
+        <div id="lsideBar">
+            <div v-on:click="folderShow" :class="{focus:seen.fileTree}">
+                <img src="./static/folder.png" alt="files" >
+            </div>
+
+            <div v-on:click="moduleShow" :class="{focus:seen.moduleContent}">
+                <img src="./static/module.png" alt="module">
+            </div>
+
+            <div v-on:click="searchShow" :class="{focus:seen.searchContent}">
+                <img src="./static/search.png" alt="search">
+            </div>
+
+            <div id="quickMod">
+                <div draggable="true" >
+                    <img draggable="false" src="./static/temp.png" >
+                </div>
+                <div draggable="true" >
+                    <img draggable="false"  src="./static/temp.png" >
+                </div >
+                <div draggable="true" >
+                    <img draggable="false" src="./static/temp.png" >
+                </div >
+                <div draggable="true" >
+                    <img draggable="false"  src="./static/temp.png" >
+                </div >
+                <div  draggable="true" >
+                    <img draggable="false"  src="./static/temp.png" >
+                </div>
+            </div>
+
+        </div>
+
+        <div id="ldrawer" :class="{ldrawerHidden:!seen.ldrawer , ldrawerShow:seen.ldrawer}">
+            <div id="ldrawerContent">
+                <div v-if="seen.fileTree" id="fileTree">
+                    <div class="folderWrapper">
+                        <h4>group1</h4>
+                        <div class="folderBody">
+                            <li>
+                                FirstTestFile
+                            </li>
+                            <li>
+                                anotherFile
+                            </li>
+                            <div class="folderWrapper">
+                                <h4>subGroup</h4>
+                                <div class="folderBody">
+                                    <li>
+                                        helloMe
+                                    </li>
+                                    <li>
+                                        helloMeAgain
+                                    </li>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div v-if="seen.moduleContent" id="moduleContent">
+                    <div>
+                        <img src="./static/temp.png" >
+                        <div>temp1</div>
+                    </div>
+                    <div>
+                        <img src="./static/temp.png" >
+                        <div>temp1</div>
+                    </div>
+                    <div>
+                        <img src="./static/temp.png" >
+                        <div>temp1</div>
+                    </div>
+                    <div>
+                        <img src="./static/temp.png" >
+                        <div>temp1</div>
+                    </div>
+                    <div>
+                        <img src="./static/temp.png" >
+                        <div>temp1</div>
+                    </div>
+                    <div>
+                        <img src="./static/temp.png" >
+                        <div>temp1</div>
+                    </div>
+                    <div>
+                        <img src="./static/temp.png" >
+                        <div>temp1</div>
+                    </div>
+                    <div>
+                        <img src="./static/temp.png" >
+                        <div>temp1</div>
+                    </div>
+                    <div>
+                        <img src="./static/temp.png" >
+                        <div>temp1</div>
+                    </div>
+                    <div>
+                        <img src="./static/temp.png" >
+                        <div>temp1</div>
+                    </div>
+                    <div>
+                        <img src="./static/temp.png" >
+                        <div>temp1</div>
+                    </div>
+                    <div>
+                        <img src="./static/temp.png" >
+                        <div>temp1</div>
+                    </div>
+                    <div>
+                        <img src="./static/temp.png" >
+                        <div>temp1</div>
+                    </div>
+                    <div>
+                        <img src="./static/temp.png" >
+                        <div>temp1</div>
+                    </div>
+                </div>
+
+                <div v-if="seen.searchContent" id="searchContent">
+                    <input type="text" id="search">
+                </div>
+            </div>
+        </div>
+
+        <div    id="workSpace">
+
+        </div>
+
+        <div id="rdrawer" v-if="seen.rdrawer">
+            <div id="propertyContent">
+                <h3 @click="propertyContentShow">属性</h3>
+                <div v-if="seen.propertyContent">
+                    <div>
+                        <div><span>title </span></div><div><input type="text" value="default"></div> <div><select  name="" id="">
+                            <option value="">string</option>
+                            <option value="">integer</option>
+                            <option value="">boolean</option>
+                        </select></div> 
+                    </div>
+
+                    <div>
+                        <div><span>writer </span></div><div><input type="text" value="someone"></div> <div><select  name="" id="">
+                            <option value="">string</option>
+                            <option value="">integer</option>
+                            <option value="">boolean</option>
+                        </select></div> 
+                    </div>
+
+                    <div>
+                        <div><span>publisher </span></div><div><input type="text" value="default"></div> <div><select  name="" id="">
+                            <option value="">string</option>
+                            <option value="">integer</option>
+                            <option value="">boolean</option>
+                        </select></div> 
+                    </div>
+
+                    <div>
+                        <div><span>price </span></div><div><input type="text" value="222"></div> <div><select  name="" id="">
+                            <option value="">string</option>
+                            <option value="">integer</option>
+                            <option value="">boolean</option>
+                        </select></div> 
+                    </div>
+                </div>
+
+            </div>
+
+            <div id="moduleView">
+                <h3 @click="moduleViewShow">模板</h3>
+                <div v-if="seen.moduleView">
+                    <div>
+                        grand parent
+                    </div>
+                    <div>
+                        parent
+                    </div>
+                    <div>
+                        this
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div id="rsideBar" @click="rdrawerShow">
+          
+        </div>
+    </div>
+    </div>
+    <script src="./static/js/d3.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script type="text/javascript">
+
+        var folderLis=[
+            {
+                isFolder:false,
+                name:"firstTestFile"
+            },
+            {
+                isFolder:true,
+                name:"group1",
+                children:[
+                    {
+                        isFolder:false,
+                        name:"file1"
+                    },
+                    {
+                        isFolder:true,
+                        name:"group11",
+                        children:[]
+                    }
+                ]
+            },
+            {
+                isFolder:true,
+                name:"group2",
+                children:[
+                    {
+                        isFolder:false,
+                        name:"file21"
+                    },
+                    {
+                        isFolder:false,
+                        name:"file22"
+                    },
+                    {
+                        isFolder:false,
+                        name:"file23"
+                    }
+                ]
+            }
+        ] ;    
+
+        var fileTree = document.getElementById("fileTree");
+
+        function renderTree(dom, folderLis){
+
+        }
+
+        
+        var app = new Vue({
+            el: "#app",
+            data:{
+                seen:{
+                    fileTree:false,
+                    moduleContent:true,
+                    searchContent:false,
+                    ldrawer:true,
+
+                    rdrawer:true,
+
+                    propertyContent:true,
+                    moduleView:true
+                },
+
+                folder:folderLis
+            },
+            
+            methods:{
+                folderShow: function(){
+                    this.seen.fileTree= !this.seen.fileTree;
+                    this.seen.moduleContent= false;
+                    this.seen.searchContent= false;
+
+                    if(!this.seen.fileTree && !this.seen.moduleContent && !this.seen.searchContent){
+                        this.seen.ldrawer=false;
+                    }else{
+                        this.seen.ldrawer=true;
+                    }
+                },
+                moduleShow: function(){
+                    this.seen.moduleContent= !this.seen.moduleContent;
+                    this.seen.fileTree= false;
+                    this.seen.searchContent= false;
+
+                    if(!this.seen.fileTree && !this.seen.moduleContent && !this.seen.searchContent){
+                        this.seen.ldrawer=false;
+                    }else{
+                        this.seen.ldrawer=true;
+                    }
+                },
+                searchShow: function(){
+                    this.seen.searchContent= !this.seen.searchContent;
+                    this.seen.fileTree= false;
+                    this.seen.moduleContent= false;
+
+                    if(!this.seen.fileTree && !this.seen.moduleContent && !this.seen.searchContent){
+                        this.seen.ldrawer=false;
+                    }else{
+                        this.seen.ldrawer=true;
+                    }
+                },
+
+                rdrawerShow:function(){
+                    this.seen.rdrawer = !this.seen.rdrawer;
+                },
+                propertyContentShow:function(){
+                    this.seen.propertyContent = !this.seen.propertyContent;
+                },
+                moduleViewShow:function(){
+                    this.seen.moduleView = !this.seen.moduleView;
+                }
+            }
+
+        });
+
+
+
+        // addEventListener must fire after vue created
+
+        function dragstartHandle(e){
+            e.dataTransfer.setData('text', e.target.innerHTML);
+            console.log(e.target);
+            // e.dataTransfer.setData('text/plain', null);
+            this.style.opacity = ".4";
+            // e.target.classList.add("inAir");
+
+        }
+
+        var quickMod = document.getElementById("quickMod");
+        var dragLis = quickMod.getElementsByTagName("div");
+        for(let i=0 ;i<dragLis.length;i++){
+            dragLis[i].addEventListener("dragstart", dragstartHandle
+            ,false);
+
+            dragLis[i].addEventListener("dragend",function(e){
+                this.style.opacity = "1";
+                // document.getElementsByClassName("inAir")[0].classList.remove("inAir");
+                console.log("dragend");
+            },false);
+        }
+
+        var workSpace = document.getElementById("workSpace");
+        workSpace.addEventListener("drop",function(e){
+            console.log("drop");
+            e.preventDefault();
+            var data = e.dataTransfer.getData("text");
+            console.log(e);
+            if(data){
+                var node = document.createElement("div");
+                node.innerHTML = data;
+                node.classList.add("node");
+                node.style.left = e.offsetX+"px";
+                node.style.top = e.offsetY+"px";
+                node.draggable=true;
+                // node.dropzone=false;
+                node.addEventListener("drop",function(e){e.preventDefault()},false);
+                node.addEventListener("dragstart", function(e){
+                    e.target.classList.add("inAir");
+
+                }
+                ,false);
+
+                // node.addEventListener("dragend",function(e){
+                //     // var n = document.getElementsByClassName("inAir")[0];
+                //     // n.style.left = e.offsetX+"px";
+                //     // n.style.top = e.offsetY+"px";
+                //     // n.classList.remove("inAir");
+
+                // })
+
+                this.appendChild(node);
+            }else{
+                var n = document.getElementsByClassName("inAir")[0];
+                n.style.left = e.offsetX+"px";
+                n.style.top = e.offsetY+"px";
+                n.classList.remove("inAir");
+
+                console.log( n.style.left , n.style.top);
+            }
+        },false);
+
+        workSpace.addEventListener("dragover",function(e){
+            e.preventDefault();
+        },false);
+        
+    </script>
+
+    <script type="text/javascript">
+    
+    </script>
+
+</body>
+</html>

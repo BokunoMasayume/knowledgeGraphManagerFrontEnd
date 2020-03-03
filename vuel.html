@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vue learning</title>
+    <style>
+        li:hover {
+            background-color: aquamarine;
+        }
+        li:hover ul{
+            background-color: white;
+        }
+
+
+        html,body{
+            height:100%;
+            padding:0;
+            margin:0;
+        }
+        #app{
+            background-color:brown;
+            height: 100%;
+            display:flex;
+        }
+        .draw{
+            flex:0 0 40px;
+            background-color: aquamarine;
+            z-index: 4;
+
+        }
+        .drawer{
+            flex:0 2 200px;
+            /* padding: 10px; */
+            background-color: blueviolet;
+
+            min-width:0px;
+            white-space: nowrap;
+        }
+        
+        .content{
+            flex :2 1 1px;
+            background-color: coral;
+            min-width: 1px;
+            /* transition: flex 1s ; */
+        }
+        /* .content:hover{
+            flex:0 1 0px;
+        } */
+        .rdrawer{
+            flex: 0 2 200px;
+            background-color: yellowgreen;
+        }
+
+        .slide-enter,.slide-leave-to{
+            /* transform: translateX(-100%); */
+            flex:0 0.0001 0.001px;
+
+        }
+        
+        .slide-enter-active , .slide-leave-active{
+            /* flex:0 2 1px; */
+
+            transition: all .5s ease ;
+        }
+       
+        /* .active{
+            flex : 0 2 1px;
+            background-color:yellow;
+
+        } */
+    </style>
+</head>
+<body>
+    <div>dfsdsf</div>
+    <div id="app">
+        <div class="draw" @click="seen = !seen">
+
+        </div>
+        <transition appear name="slide">
+            <div class="drawer" v-show="seen">
+                drawer drawer me<br>
+                dsfsdf
+            </div>
+        </transition>
+       
+        <div class="content">
+            ahahah
+        </div>
+        <div class = "rdrawer">
+            dsfsfddsf
+        </div>
+
+        <!-- <div>
+            <ul >
+                <li 
+                is="my-file-tree"
+                v-for="file in getfiles(null)"
+                v-bind:file="file"
+                v-bind:key="file.id"></li>
+            </ul>
+        </div> -->
+
+
+    </div>
+
+    <script src="./static/js/vue.js"></script>
+    <script>
+
+        let files = [
+    {
+        "id": "5e4802af6278bd3ebf72a300",
+        "userId": "5e46bb31afe811358c43522c",
+        "parentId": null,
+        "fileName": "dsd1",
+        "folder": false,
+        "delete": false,
+        "originName": null
+    },
+    {
+        "id": "5e5a31047c3c7355e07bd388",
+        "userId": "5e46bb31afe811358c43522c",
+        "parentId": null,
+        "fileName": "somes",
+        "folder": true,
+        "delete": false,
+        "originName": null
+    },
+    {
+        "id": "5e5a31737c3c7355e07bd38a",
+        "userId": "5e46bb31afe811358c43522c",
+        "parentId": "5e5a31047c3c7355e07bd388",
+        "fileName": "secondisfolderinsomes",
+        "folder": true,
+        "delete": false,
+        "originName": null
+    },
+    {
+        "id": "5e5a318d7c3c7355e07bd38b",
+        "userId": "5e46bb31afe811358c43522c",
+        "parentId": "5e5a31047c3c7355e07bd388",
+        "fileName": "thridisafolderinsomes",
+        "folder": true,
+        "delete": false,
+        "originName": null
+    }
+];
+        let data = {
+                message:"Hello asshole!",
+                files :files,
+
+                seen:false
+            };
+
+    
+
+        // Vue.component("my-file-tree",
+    let myFileTree=    {
+            name:"my-file-tree",
+            data:function(){
+                return {
+                    folderClass:"folder"
+                }
+            },
+            
+            methods:{
+                getsubfiles:function(){
+                    return files.filter((ele)=>(ele.parentId == this.file.id));
+                }
+            },
+            props:["file"],
+            template:'<li >{{file.id}}-{{file.fileName}}\
+                <ul v-if="file.folder">\
+                    <li is="my-file-tree" v-for="file in getsubfiles()" v-bind:file="file" v-bind:key="file.id"> </li>\
+            </ul></li>\
+            '
+        }
+
+        // myFileTree.components = {
+        //     "my-file-tree":myFileTree
+        // }
+        // )
+        var app = new Vue({
+            el:"#app",
+            data:data,
+            computed:{
+                reversedMessage:function(){return this.message.split("").reverse().join('');}
+            },
+            methods:{
+                sayhi:function(e){
+                    alert("hi");
+                    console.log(e);
+                    console.log(app.$event);
+                },
+                getfiles:function(parentId){
+                    return files.filter((ele)=>(parentId==ele.parentId));
+                }
+            },
+            components:{
+                "my-file-tree":myFileTree
+            }
+        });
+
+    </script>
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> -->
+    <!-- 生产环境版本，优化了尺寸和速度 -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
+</body>
+</html>

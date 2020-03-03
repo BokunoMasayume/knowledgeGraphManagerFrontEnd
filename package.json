@@ -1,0 +1,26 @@
+{
+  "name": "toolstyle",
+  "version": "1.0.0",
+  "description": "knowledge graphic application fornt end",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BokunoMasayume/knowledgeGraphManagerFrontEnd.git"
+  },
+  "keywords": [
+    "vue"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BokunoMasayume/knowledgeGraphManagerFrontEnd/issues"
+  },
+  "homepage": "https://github.com/BokunoMasayume/knowledgeGraphManagerFrontEnd#readme",
+  "devDependencies": {
+    "webpack": "^4.42.0"
+  }
+}
