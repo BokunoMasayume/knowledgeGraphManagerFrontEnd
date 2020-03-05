@@ -105,7 +105,20 @@
     </div>
 
     <script src="./static/js/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
+
+        // const axios = require('axios');
+        axios.get('http://localhost:8889/file',{
+            headers:{
+                Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJBbGxlbiIsImNyZWF0ZWQiOjE1ODMyMTY0MzI5ODcsImV4cCI6MTU4MzQ3NTYzMn0.26z_b0cpqr_MusORN_TKr95y9u_SvBR5eODko1bmtgs'
+               
+            }
+        }).then(function(response){
+            console.log(response);
+        }).catch(function(response){
+            console.log(response);
+        });
 
         let files = [
     {
