@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>hello </title>
+    <style type="text/css">
+        @import url('./static/css/main.css');
+        @import url("./static/css/signin.css");
+    </style>
+</head>
+<body >
+    <div id ="app">
+        <div id="signin" v-show="visibleHandler.signinbox">
+            <div>
+            <div class="tab">
+                <div @click="visibleHandler.islogin = true" :class="{'tabfocus':visibleHandler.islogin}">登 录</div>
+                <div @click="visibleHandler.islogin = false" :class="{'tabfocus':!visibleHandler.islogin}">注 册</div>
+            </div>
+            <transition name="signcontent" mode="out-in">
+            <!-- login  -->
+            <div class="content" v-if="visibleHandler.islogin" key=1>
+                <div>
+                    <label for="uname">用户名  </label>
+                    <input type="text"  id="uname" v-model="input.uname"  placeholder="请输入你的用户名">
+                </div>
+                <div>
+                    <label for="pword">密  码  </label>
+                    <input type="password"  id="pword" v-model="input.pword" placeholder="请输入密码">
+                </div>
+                <div :class="{warn:isSignboxWarn, log:true, error:classStatus.isSignboxError}">{{content.signWarn}}</div>
+                <div>
+                    <button @click="login">提 交</button>
+                </div>
+            </div>
+            <!-- signin -->
+            <div class="content" v-if="!visibleHandler.islogin" key=2>
+                <div>
+                    <label for="uname">用户名  </label>
+                    <input type="text"  id="uname" v-model="input.uname"  placeholder="请输入你的用户名">
+                </div>
+                <div>
+                    <label for="pword">密  码  </label>
+                    <input type="password"  id="pword" v-model="input.pword" placeholder="请输入密码">
+                </div>
+                <div>
+                    <label for="pwordrep">确认密码  </label>
+                    <input type="password"  id="pwordrep" v-model="input.pwordrep" placeholder="请再次输入密码以确认">
+                </div>
+                <div :class="{warn:isSignboxWarn , log:true, error:classStatus.isSignboxError}">{{content.signWarn}}</div>
+
+                <div>
+                    <button @click = "signup">提 交</button>
+                </div>
+            </div>
+            </transition>
+            </div>
+        </div>
+
+
+
+       
+    </div>
+
+    <script src="./static/js/build/bundle.js"></script>
+    <script>
+      
+
+
+    </script>
+</body>
+</html>
+
+
+
+<!-- <div>
+    <input type="file" name="test" >
+</div>
+fileinput = document.getElementsByTagName('input')[0];
+fileinput.onchange = function(e){
+    console.log(e);
+} -->

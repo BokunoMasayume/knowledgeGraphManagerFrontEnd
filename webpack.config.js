@@ -2,11 +2,11 @@ const path = require('path');
 
 module.exports = {
     mode:"development",
-    entry: './jstest/main.js',
+    entry: './static/js/src/main.js',
 
     output:{
         filename: 'bundle.js',
-        path: path.resolve(__dirname , './jstest')
+        path: path.resolve(__dirname , './static/js/build')
     },
 
 
