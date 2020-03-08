@@ -5,19 +5,298 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <style>
+        body{
+            background-color: rgb(0, 0, 0);
+        }
+        /* svg:hover #path{
+            stroke:rgb(203, 203, 219);
+            stroke-width: 5px;
+            fill:none;
+            animation:move 3s linear forwards infinite ;
+
+            stroke-dasharray: 60%,40%;
+
+        }
+        @keyframes move{
+            0%{
+                /* stroke-dasharray: 0,5000px; */
+                /* stroke-dasharray: 0,100%; */
+                stroke-dashoffset: 0%;
+            }
+            100%{
+                /* stroke-dasharray: 5000px 500px; */
+                /* stroke-dasharray: 100% 0; */
+                stroke-dashoffset: 100%;
+                
+            }
+        } */
+    </style>
 </head>
 <body>
-    <svg id="mysvg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" >
-        <style>
-            .tex{
-                font-size: 10px;
-                background-color: #fff;
+
+    <img src="./static/filetree_u.svg" alt="">
+
+    <svg  viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"  xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200">
+        <defs>
+        <style type="text/css">
+            svg:hover #folderaddpath{
+                stroke:rgb(122, 252, 245);
+                stroke-width: 5px;
+                fill:none;
+                animation:move 3s linear forwards infinite ;
+    
+                stroke-dasharray: 60%,40%;
+    
             }
-        </style>
-        <circle cx="400" cy="300" r="50"/>
-        <image xlink:href="./static/module.png" width ="30" x="100" y="0"/>
-        <text x="100" y="20" class ="tex" >Hello</text>
-    </svg>
+            #folderaddpath{
+                fill:none;
+                stroke:rgb(9, 253, 241);
+            }
+            @keyframes move{
+                0%{
+                    /* stroke-dasharray: 0,5000px; */
+                    /* stroke-dasharray: 0,100%; */
+                    stroke-dashoffset: 0%;
+                }
+                100%{
+                    /* stroke-dasharray: 5000px 500px; */
+                    /* stroke-dasharray: 100% 0; */
+                    stroke-dashoffset: 100%;
+                }
+            }</style>
+        </defs><g>
+        <path id="folderaddpath" d="M794.1632 481.7408c19.3024 0 34.9184 15.3088 34.9184 34.2016v151.7568h155.2384c19.3536 0 35.0208 15.36 35.0208 34.2016a34.6112 34.6112 0 0 1-35.0208 34.1504l-155.2384-0.0512v151.808c0 18.944-15.616 34.2528-34.9184 34.2528a34.56 34.56 0 0 1-34.9184-34.2528l-0.0512-151.808h-155.1872a34.6112 34.6112 0 0 1-35.0208-34.0992c0-18.8928 15.6672-34.1504 35.0208-34.1504l155.1872-0.0512v-151.7568c0-18.8928 15.6672-34.2016 34.9696-34.2016zM72.5504 102.4l313.1392 0.1024c22.016 1.4336 40.0896 7.168 53.6064 18.944 11.5712 10.1376 20.0704 23.6544 26.5216 41.2672l19.456 59.904a33.5872 33.5872 0 0 1 1.4336 6.4512h502.272c19.3536 0 35.0208 15.3088 35.0208 34.1504v183.296a34.6112 34.6112 0 0 1-35.0208 34.1504 34.6112 34.6112 0 0 1-34.9696-34.1504V297.3696H69.9904v530.8416c0.2048 10.752 0.1024 15.5136 2.56 19.0976 1.8944 2.8672 3.4304 3.4304 7.68 3.584h458.5984c19.3024 0 34.9696 15.2576 34.9696 34.1504a34.6112 34.6112 0 0 1-34.9696 34.1504H80.7424l-5.9904-0.512c-27.4432-4.608-48.128-14.848-60.2624-33.4848-9.728-15.0016-14.1312-33.6896-14.4896-56.4736V263.0144l0.1536-93.2864c1.8432-18.176 7.936-33.792 19.2512-45.824 12.4928-13.3632 29.952-19.968 53.1456-21.504z m2.4064 68.2496c-4.3008 0.256-4.608 1.2288-4.9152 2.4064l-0.0512 56.0128h343.9104l-14.4384-44.544c-2.3552-6.4512-4.3008-10.1888-6.8608-12.1344-2.5088-1.9456-3.7888-1.2288-9.3184-1.6896l-308.3264-0.0512z" fill="#2c2c2c" p-id="959">
+        </path></g>
+        </svg>
+
+
+        <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"  xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200">
+            <defs><style type="text/css">
+             svg:hover #searchpath{
+                            stroke:rgb(122, 252, 245);
+                            stroke-width: 5px;
+                            fill:none;
+                            animation:move 3s linear forwards infinite ;
+                
+                            stroke-dasharray: 60%,40%;
+                
+                        }
+                        #searchpath{
+                            fill:none;
+                            stroke:rgb(9, 253, 241);
+                        }
+                        @keyframes move{
+                            0%{
+                                /* stroke-dasharray: 0,5000px; */
+                                /* stroke-dasharray: 0,100%; */
+                                stroke-dashoffset: 0%;
+                            }
+                            100%{
+                                /* stroke-dasharray: 5000px 500px; */
+                                /* stroke-dasharray: 100% 0; */
+                                stroke-dashoffset: 100%;
+                            }
+                        }
+            </style></defs><path id="searchpath" d="M756.7 183.4c-158.3-158.3-415-158.3-573.3 0s-158.3 415 0 573.3c142 142 362.9 156.2 521.2 43.5L844 939.6c26.3 26.3 69.3 26.3 95.6 0s26.3-69.3 0-95.6L800.2 704.7c112.7-158.4 98.5-379.3-43.5-521.3z m-95.5 477.8c-105.4 105.4-276.8 105.4-382.2 0S173.6 384.3 279 279s276.8-105.4 382.2 0 105.4 276.8 0 382.2z" ></path></svg>
+
+
+
+            <svg   viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"  xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200">
+                <defs>
+                <style type="text/css">
+                svg:hover #fileaddpath{
+                                stroke:rgb(122, 252, 245);
+                                stroke-width: 5px;
+                                fill:none;
+                                animation:move 3s linear forwards infinite ;
+                    
+                                stroke-dasharray: 60%,40%;
+                    
+                            }
+                            #fileaddpath{
+                                fill:none;
+                                stroke:rgb(9, 253, 241);
+                            }
+                            @keyframes move{
+                                0%{
+                                    /* stroke-dasharray: 0,5000px; */
+                                    /* stroke-dasharray: 0,100%; */
+                                    stroke-dashoffset: 0%;
+                                }
+                                100%{
+                                    /* stroke-dasharray: 5000px 500px; */
+                                    /* stroke-dasharray: 100% 0; */
+                                    stroke-dashoffset: 100%;
+                                }
+                            }
+                </style>
+                </defs>
+                
+                <path id="fileaddpath" d="M862.155574 767.997312h-146.687486v-155.954654a35.839875 35.839875 0 0 0-9.881566-25.497511 31.692689 31.692689 0 0 0-23.961516-10.495963 31.692689 31.692689 0 0 0-24.012716 10.495963 35.839875 35.839875 0 0 0-9.881565 25.497511v156.005854H508.569612a31.692689 31.692689 0 0 0-23.961516 10.495963 35.839875 35.839875 0 0 0-9.881566 25.497511 35.839875 35.839875 0 0 0 9.881566 25.497511 31.692689 31.692689 0 0 0 23.961516 10.495963h139.161113v147.967482a35.839875 35.839875 0 0 0 9.881565 25.497511 31.692689 31.692689 0 0 0 24.012716 10.495963c9.369567 0 17.407939-3.481588 23.961516-10.495963a35.839875 35.839875 0 0 0 9.881566-25.497511v-147.967482h146.687486c9.420767 0 17.407939-3.532788 23.961517-10.495963a35.839875 35.839875 0 0 0 9.881565-25.497511 35.839875 35.839875 0 0 0-9.881565-25.497511 31.692689 31.692689 0 0 0-23.961517-10.495963z m26.419108-510.615813L682.495403 24.627114l-22.527921-24.524714H193.537115c-8.70397 0-18.431935-0.511998-26.931106 0.870397A42.342252 42.342252 0 0 0 140.391701 15.359946c-14.38715 16.281543-12.287957 36.710272-12.287957 56.729402v879.86892c0 20.01913-2.303992 41.676654 12.287957 56.831801 14.591949 15.155147 24.371115 15.155147 43.161449 15.155147H440.832249c9.420767 0 17.407939-3.481588 24.012716-10.495963a35.839875 35.839875 0 0 0 9.881565-25.497511 35.839875 35.839875 0 0 0-9.881565-25.497511 31.692689 31.692689 0 0 0-24.012716-10.495963H196.865103L196.557904 69.836556h372.478696v183.960956c0 20.01913 7.782373 38.041467 20.01913 50.995021 12.287957 12.953555 29.183898 20.991927 47.974232 20.991927h191.231331v214.27125a35.839875 35.839875 0 0 0 9.881565 25.497511 31.692689 31.692689 0 0 0 23.961517 10.495963c9.420767 0 17.407939-3.532788 24.012716-10.495963a35.839875 35.839875 0 0 0 9.830365-25.497511V280.319019l0.0512-14.28475-7.423974-8.65277z m-247.653533-8.806369c-2.099193-2.713591-3.379188-7.475174-3.839987-14.33595V77.823728l156.620252 175.973784H653.311505c-6.143978-0.819197-10.239964-2.559991-12.390356-5.273582z" fill="#2c2c2c" p-id="995">
+                </path>
+                </svg>
+
+
+                <svg  viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"  xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200">
+                    <defs>
+                    <style type="text/css">
+                svg:hover #modulepath{
+                                stroke:rgb(122, 252, 245);
+                                stroke-width: 5px;
+                                fill:none;
+                                animation:move 3s linear forwards infinite ;
+                    
+                                stroke-dasharray: 60%,40%;
+                    
+                            }
+                            #modulepath{
+                                fill:none;
+                                stroke:rgb(9, 253, 241);
+                            }
+                            @keyframes move{
+                                0%{
+                                    /* stroke-dasharray: 0,5000px; */
+                                    /* stroke-dasharray: 0,100%; */
+                                    stroke-dashoffset: 0%;
+                                }
+                                100%{
+                                    /* stroke-dasharray: 5000px 500px; */
+                                    /* stroke-dasharray: 100% 0; */
+                                    stroke-dashoffset: 100%;
+                                }
+                            }
+                    </style>
+                    </defs>
+                    <path id="modulepath" d="M183.24 688.67c10.91-1.65 22.19-2.06 32.67-5.18 30.37-9 38.33-32.33 15.52-53.75-31.07-29.2-65.62-54.65-98.69-81.71C114.84 533.36 97 518.54 79 504.08c-15.63-12.5-19.25-30.14-9.71-45 29.5-46.05 58.82-92.74 93.59-134.67 23.11-27.86 47.1-19.26 60.38 15.56 3.63 9.51 5.5 19.69 8.44 29.49 8.71 29.11 27.06 39.53 55 27.6 48-20.52 88.26-52 116-96.93 20-32.39 11.38-54.24-24.38-67.12-16.55-6.01-34.32-8.88-50.12-16.25-24.29-11.35-31-32.79-10.73-48.8 45.61-36.1 94.16-68.85 143.76-99.27 19.1-11.71 39.57 0 53.32 18.31 25.8 34.24 51.32 68.71 77.49 102.66 9.65 12.51 19.22 26.1 31.76 35.05 11.38 8.13 28.35 17.09 40 14.17 20.65-5.16 28.1-24.78 26.49-46.82-0.73-10-1.29-20.72 1.42-30.14 8.08-28.14 36.17-42.09 61.57-28.28 48.62 26.42 87.38 63.86 107.32 116.8 17.28 45.87 1.49 66.11-47.14 69.45-14 1-36.77 8.09-39 16.66-3.25 12.72 3.88 34.5 14.25 43.22C830.65 415 875.28 447 919.24 479.64c48.27 35.89 52.55 53.74 18.74 104.44-23.21 34.81-47.06 69.75-75 100.68-30.79 34.13-60.85 26.41-68.84-18.63-13.74-77.46-61.36-78.23-109-30.37-26.33 26.46-48.42 58.87-65.86 92.08-16.57 31.56-2.37 53.19 31.8 62.82 21.79 6.14 54 7.15 53.89 34.26-0.1 18.45-20.11 40.46-36.66 54.33-29.1 24.39-61.61 45-94.05 65-42 25.86-62 20.49-91.82-19.85C451 881.68 419.32 839.1 387.1 797a79 79 0 0 0-22.91-20.06c-22.41-12.82-40.65-2.33-42.72 23.46-4.1 51.07-38.45 72.53-85.41 50.84-48.55-22.42-81.23-62.07-102.14-110.3-14.72-33.94 7.08-56.43 49.32-52.27z" ></path>
+                </svg>
+
+
+
+                <!DOCTYPE svg >
+<svg  viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"  xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200">
+<defs>
+<style type="text/css">
+svg:hover #filetreepath{
+                stroke:rgb(122, 252, 245);
+                stroke-width: 5px;
+                fill:none;
+                animation:move 3s linear forwards infinite ;
+    
+                stroke-dasharray: 60%,40%;
+    
+            }
+            #filetreepath{
+                fill:none;
+                stroke:rgb(9, 253, 241);
+            }
+            @keyframes move{
+                0%{
+                    /* stroke-dasharray: 0,5000px; */
+                    /* stroke-dasharray: 0,100%; */
+                    stroke-dashoffset: 0%;
+                }
+                100%{
+                    /* stroke-dasharray: 5000px 500px; */
+                    /* stroke-dasharray: 100% 0; */
+                    stroke-dashoffset: 100%;
+                }
+            }
+</style>
+</defs>
+<g id="filetreepath">
+<path d="M880.104131 0v1024h-61.06734V45.290477H600.472838v978.709523h-56.443086V0h336.074379z" ></path>
+<path d="M771.706203 80.652411h19.857086v943.347589h-19.857086zM727.7758 80.652411h19.857086v943.347589h-19.857086zM680.173197 80.652411h19.857086v943.347589h-19.857086zM636.242795 80.652411h19.857085v943.347589H636.242795zM143.895869 1024V0h336.074379v1024h-60.931332V45.290477H200.474963v978.709523H143.895869z" p-id="4941"></path>
+<path d="M371.57232 80.652411h19.857086v943.347589h-19.857086zM327.641918 80.652411h19.857086v943.347589h-19.857086zM280.175322 80.652411h19.721079v943.347589h-19.721079zM236.24492 80.652411h19.721078v943.347589H236.24492z" ></path>
+</g>
+</svg>
+
+
+<!DOCTYPE svg >
+<svg viewBox="-120 -120 1264 1264" version="1.1" xmlns="http://www.w3.org/2000/svg"  xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200">
+<defs>
+<style type="text/css">
+svg:hover #deletepath{
+                stroke:rgb(122, 252, 245);
+                stroke-width: 5px;
+                fill:none;
+                animation:move 3s linear forwards infinite ;
+    
+                stroke-dasharray: 60%,40%;
+    
+            }
+            #deletepath{
+                fill:none;
+                stroke:rgb(9, 253, 241);
+            }
+            @keyframes move{
+                0%{
+                    /* stroke-dasharray: 0,5000px; */
+                    /* stroke-dasharray: 0,100%; */
+                    stroke-dashoffset: 0%;
+                }
+                100%{
+                    /* stroke-dasharray: 5000px 500px; */
+                    /* stroke-dasharray: 100% 0; */
+                    stroke-dashoffset: 100%;
+                }
+            }
+</style>
+</defs>
+<path id="deletepath" d="M590.514383 488.040949 952.888054 851.125263C981.253371 879.546168 981.11016 925.804176 952.546629 954.423734 923.783934 983.242895 877.825294 983.196523 849.450322 954.76589L487.076651 591.681576 124.70298 954.76589C96.337663 983.186795 50.170204 983.043365 21.606672 954.423734-7.156023 925.604646-7.109798 879.555896 21.265175 851.125263L383.638845 488.040949 21.265175 124.956635C-7.100143 96.53573-6.956932 50.277722 21.606672 21.658164 50.369368-7.160997 96.328008-7.114625 124.70298 21.316008L487.076651 384.400322 849.450322 21.316008C877.815566-7.104897 923.983025-6.961467 952.546629 21.658164 981.309325 50.477252 981.263026 96.526002 952.888054 124.956635L590.514383 488.040949 590.514383 488.040949Z"></path>
+</svg>
+
+
+
+<!DOCTYPE svg >
+<svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200">
+<defs>
+<style type="text/css">
+svg:hover #addpath{
+                stroke:rgb(122, 252, 245);
+                stroke-width: 5px;
+                fill:none;
+                animation:move 3s linear forwards infinite ;
+    
+                stroke-dasharray: 60%,40%;
+    
+            }
+            #addpath{
+                fill:none;
+                stroke:rgb(9, 253, 241);
+            }
+            @keyframes move{
+                0%{
+                    /* stroke-dasharray: 0,5000px; */
+                    /* stroke-dasharray: 0,100%; */
+                    stroke-dashoffset: 0%;
+                }
+                100%{
+                    /* stroke-dasharray: 5000px 500px; */
+                    /* stroke-dasharray: 100% 0; */
+                    stroke-dashoffset: 100%;
+                }
+            }
+</style>
+</defs>
+<path id="addpath" d="M858.88 448H576V167.68a64 64 0 0 0-128 0V448H169.6a64 64 0 0 0 0 128H448v280.32a64 64 0 0 0 128 0V576h280.32a64 64 0 0 0 0-128z" ></path>
+</svg>
+    <script>
+       var a = new Promise((res, rej)=>{
+           console.log("start promise");
+           setTimeout(res , 2000);
+       }).then(()=>{
+           console.log("in first then");
+           return new Promise((res,rej)=>{
+            console.log("in 2nd promise");
+            setTimeout(res , 2000);
+           })
+       })
+       
+       a.then(()=>{
+           console.log("in 2nd then");
+       });
+    </script>
 </body>
 </html>
 

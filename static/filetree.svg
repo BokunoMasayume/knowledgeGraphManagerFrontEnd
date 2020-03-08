@@ -1,0 +1,38 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg >
+<svg  viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"  xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200">
+<defs>
+<style type="text/css">
+svg:hover #filetreepath{
+                stroke:rgb(122, 252, 245);
+                stroke-width: 5px;
+                fill:none;
+                animation:move 3s linear forwards infinite ;
+    
+                stroke-dasharray: 60%,40%;
+    
+            }
+            #filetreepath{
+                fill:none;
+                stroke:rgb(9, 253, 241);
+            }
+            @keyframes move{
+                0%{
+                    /* stroke-dasharray: 0,5000px; */
+                    /* stroke-dasharray: 0,100%; */
+                    stroke-dashoffset: 0%;
+                }
+                100%{
+                    /* stroke-dasharray: 5000px 500px; */
+                    /* stroke-dasharray: 100% 0; */
+                    stroke-dashoffset: 100%;
+                }
+            }
+</style>
+</defs>
+<g id="filetreepath">
+<path d="M880.104131 0v1024h-61.06734V45.290477H600.472838v978.709523h-56.443086V0h336.074379z" ></path>
+<path d="M771.706203 80.652411h19.857086v943.347589h-19.857086zM727.7758 80.652411h19.857086v943.347589h-19.857086zM680.173197 80.652411h19.857086v943.347589h-19.857086zM636.242795 80.652411h19.857085v943.347589H636.242795zM143.895869 1024V0h336.074379v1024h-60.931332V45.290477H200.474963v978.709523H143.895869z" p-id="4941"></path>
+<path d="M371.57232 80.652411h19.857086v943.347589h-19.857086zM327.641918 80.652411h19.857086v943.347589h-19.857086zM280.175322 80.652411h19.721079v943.347589h-19.721079zM236.24492 80.652411h19.721078v943.347589H236.24492z" ></path>
+</g>
+</svg>

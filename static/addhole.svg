@@ -1,7 +1,9 @@
 <?xml version="1.0" standalone="no"?>
-<!DOCTYPE svg ><svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"  xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200">
-<defs><style type="text/css">
- svg:hover #searchpath{
+<!DOCTYPE svg >
+<svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200">
+<defs>
+<style type="text/css">
+svg:hover #addpath{
                 stroke:rgb(122, 252, 245);
                 stroke-width: 5px;
                 fill:none;
@@ -10,7 +12,7 @@
                 stroke-dasharray: 60%,40%;
     
             }
-            #searchpath{
+            #addpath{
                 fill:none;
                 stroke:rgb(9, 253, 241);
             }
@@ -26,5 +28,7 @@
                     stroke-dashoffset: 100%;
                 }
             }
-</style></defs
-><path id="searchpath" d="M756.7 183.4c-158.3-158.3-415-158.3-573.3 0s-158.3 415 0 573.3c142 142 362.9 156.2 521.2 43.5L844 939.6c26.3 26.3 69.3 26.3 95.6 0s26.3-69.3 0-95.6L800.2 704.7c112.7-158.4 98.5-379.3-43.5-521.3z m-95.5 477.8c-105.4 105.4-276.8 105.4-382.2 0S173.6 384.3 279 279s276.8-105.4 382.2 0 105.4 276.8 0 382.2z" ></path></svg>
+</style>
+</defs>
+<path id="addpath" d="M858.88 448H576V167.68a64 64 0 0 0-128 0V448H169.6a64 64 0 0 0 0 128H448v280.32a64 64 0 0 0 128 0V576h280.32a64 64 0 0 0 0-128z" ></path>
+</svg>

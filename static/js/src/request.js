@@ -22,6 +22,7 @@ function requireFactory(showcallback) {
         if (response.data.token && (response.config.url == "/auth/login" || response.config.url == "auth/refresh")) {
             setAuthor(response.data.token);
             window.localStorage.setItem('token',response.data.token);
+            window.localStorage.setItem('tokenissuedate' , new Date().getTime());
         }
         return response;
 
@@ -68,6 +69,10 @@ function requireFactory(showcallback) {
 
     function refreshToken() {
         return APIaxios.get('/auth/refresh');
+    }
+
+    function getUserInfo(){
+        return APIaxios.get('/auth/selfinfo');
     }
 
     /**
@@ -201,6 +206,7 @@ function requireFactory(showcallback) {
         login: login,
         signup: signup,
         refreshToken: refreshToken,
+        userInfo: getUserInfo,
 
         file: {
             getAll: getfiles,

@@ -1,0 +1,139 @@
+/**
+* file tree
+*/
+svg:hover #filetreepath{
+    stroke:rgb(122, 252, 245);
+    stroke-width: 5px;
+    fill:none;
+    animation:move 3s linear forwards infinite ;
+
+    stroke-dasharray: 60%,40%;
+    stroke-width: 10px;
+
+}
+#filetreepath{
+    fill:none;
+    stroke:rgb(6, 141, 134);
+    stroke-width: 10px;
+}
+.focus>svg>#filetreepath{
+    stroke:rgb(33, 252, 241);
+
+}
+@keyframes move{
+    0%{
+        /* stroke-dasharray: 0,5000px; */
+        /* stroke-dasharray: 0,100%; */
+        stroke-dashoffset: 0%;
+    }
+    100%{
+        /* stroke-dasharray: 5000px 500px; */
+        /* stroke-dasharray: 100% 0; */
+        stroke-dashoffset: 100%;
+    }
+}
+
+
+/**
+* module
+*/
+svg:hover #modulepath{
+    stroke:rgb(122, 252, 245);
+    stroke-width: 5px;
+    fill:none;
+    animation:move 3s linear forwards infinite ;
+
+    stroke-dasharray: 60%,40%;
+    stroke-width: 10px;
+
+}
+#modulepath{
+    fill:none;
+    stroke-width: 10px;
+    stroke:rgb(6, 141, 134);
+
+}
+.focus>svg>#modulepath{
+    stroke:rgb(33, 252, 241);
+
+}
+@keyframes move{
+    0%{
+        /* stroke-dasharray: 0,5000px; */
+        /* stroke-dasharray: 0,100%; */
+        stroke-dashoffset: 0%;
+    }
+    100%{
+        /* stroke-dasharray: 5000px 500px; */
+        /* stroke-dasharray: 100% 0; */
+        stroke-dashoffset: 100%;
+    }
+}
+
+/**
+* search
+*/
+svg:hover #searchpath{
+    stroke:rgb(122, 252, 245);
+    stroke-width: 5px;
+    fill:none;
+    animation:move 3s linear forwards infinite ;
+
+    stroke-dasharray: 60%,40%;
+    
+    stroke-width: 10px;
+
+}
+#searchpath{
+    fill:none;
+    stroke-width: 10px;
+    stroke:rgb(6, 141, 134);
+
+}
+.focus>svg>#searchpath{
+    stroke:rgb(33, 252, 241);
+
+}
+@keyframes move{
+    0%{
+        /* stroke-dasharray: 0,5000px; */
+        /* stroke-dasharray: 0,100%; */
+        stroke-dashoffset: 0%;
+    }
+    100%{
+        /* stroke-dasharray: 5000px 500px; */
+        /* stroke-dasharray: 100% 0; */
+        stroke-dashoffset: 100%;
+    }
+}
+
+/**
+* circle clip path
+*/
+
+svg:hover .circleclippath{
+    stroke:rgb(122, 252, 245);
+    stroke-width: 3px;
+    fill:none;
+    animation:move 3s linear forwards infinite ;
+
+    stroke-dasharray: 60%,40%;
+
+}
+.circleclippath{
+    fill:none;
+    stroke:rgb(9, 253, 241);
+}
+@keyframes move{
+    0%{
+        /* stroke-dasharray: 0,5000px; */
+        /* stroke-dasharray: 0,100%; */
+        stroke-dashoffset: 0%;
+    }
+    100%{
+        /* stroke-dasharray: 5000px 500px; */
+        /* stroke-dasharray: 100% 0; */
+        stroke-dashoffset: 100%;
+    }
+
+}
