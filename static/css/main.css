@@ -103,14 +103,7 @@ html,body{
     background-color: beige;
 }
 
-@keyframes drawin{
-    0%{
-        flex-basis: 250px;
-    }
-    100%{
-        flex-basis: 0px;
-    }
-}
+ 
 
 /**
 *  graph-canvas

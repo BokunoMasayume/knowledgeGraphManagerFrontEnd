@@ -1,0 +1,56 @@
+.ldrawer>div{
+    height: 100%;
+}
+.ldrawer>.filetree{
+    background-color: blue;
+}
+.ldrawer>.module{
+    background-color: aqua;
+}
+.ldrawer>.search{
+    background-color: chartreuse;
+}
+@keyframes drawin{
+    0%{
+        flex-basis: 250px;
+    }
+    100%{
+        flex-basis: 0px;
+    }
+}
+
+.ldrawer-enter-active{
+    animation: drawin .5s reverse;
+}
+.ldrawer-leave-active{
+    animation: drawin .5s ;
+}
+
+/**
+* 模板
+*/
+.ldrawer>.module{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-content: flex-start;
+}
+.ldrawer>.module image{
+    clip-path: circle(50%);
+}
+
+.ldrawer>.module>.module-item{
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    padding:5px;
+
+    background-color: beige;
+}
+.ldrawer>.module>.module-item:hover{
+    color:rgb(0, 255, 157);
+}
+
+.ldrawer>.module>.module-item>.labelname{
+    font-size: smaller;
+}

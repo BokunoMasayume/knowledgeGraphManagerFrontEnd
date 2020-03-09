@@ -1,6 +1,7 @@
 // import {requestHandler} from './request';
 import {requireFactory} from './request';
 import Vue from 'vue/dist/vue.esm';
+import contextMenuHandler from "./contextMenu";
 
 window.app = new Vue({
     el: "#app",
@@ -41,9 +42,10 @@ window.app = new Vue({
         currentModule:null,
         currentRelation:null,
         currentNode:null,
+        current:null,
 
         //the value is the template name
-        ldrawerContent:"file-tree"//or module or search
+        ldrawerContent:"filetree"//or module or search or null
     },
 
     computed:{
@@ -67,15 +69,23 @@ window.app = new Vue({
     },
     provide:function(){
         return {
-            clickFile: this.clickFile
+            clickFile: this.clickFile,
+            clickModule: this.clickModule
         }
     },
     methods:{
-        clickLbar:function(b ){
-            this.ldrawerContent = this.ldrawerContent===btnname?null:btnname;
-
+        clickLbar:function( btnstr ){
+            this.ldrawerContent = this.ldrawerContent === btnstr?null:btnstr;            // let ct = event.currentTarget;
+            
+        },
+        clickModule:function(moduleobj){
+            console.log(this);
+            this.current = moduleobj;
+            this.currentModule  = moduleobj;
         },
         clickFile:function(fileobj){
+            console.log(this);
+            this.current = fileobj;
             this.currentFile = fileobj;
             if(fileobj.folder){
                 return;
@@ -126,7 +136,6 @@ window.app = new Vue({
                 this.content.signWarn = "用户不存在或密码错误";
             });
 
-            //request other messages
 
         },
         signup:function(){
@@ -157,6 +166,32 @@ window.app = new Vue({
     },
 
     components:{
+        "module-item":{
+            name:"module-item",
+            template:`
+                <div @contextmenu="testmenu(moduleobj, $event)" @click="clickModule(moduleobj);" :class="{'module-item':true, 'focus':$root.currentModule && $root.currentModule.id===moduleobj.id}">
+                    <div class='avatar'>
+                        <svg width="30" height="30" viewBox="0 0 50 50">
+                            <image :xlink:href="$root.baseURL+'/image/'+moduleobj.avatarUri" width="50" height="50" />
+                            <circle r="25" cx="25"  cy="25" class="circleclippath" /> 
+                        </svg>
+                    </div>
+                    <div class='labelname'>
+                        {{moduleobj.labelName}}
+                    </div>
+                </div>
+            `,
+            inject:['clickModule'],
+            props:['moduleobj'],
+            methods:{
+                testmenu:function(obj , e){
+                    contextMenuHandler.setCurrentObj(obj);
+                    contextMenuHandler.menuhandler("modulemenu",e);
+                    e.preventDefault();
+                }
+            }
+
+        },
         
         "file-tree-item":{
             name:"file-tree-item",
@@ -188,9 +223,13 @@ window.app = new Vue({
         window.requireHandler = requireFactory(function(){
             app.visibleHandler.signinbox = true;
         });
+       
     },
 
     mounted:function(){
+        /**
+         * user login signup
+         */
         let gap = new Date().getTime() - window.localStorage.getItem('tokenissuedate');
         if( !window.localStorage.getItem('token') || !window.localStorage.getItem('tokenissuedate') || gap >= 3*24*60*60*1000){
             //more than 3 days or never login, needs login
@@ -225,8 +264,16 @@ window.app = new Vue({
             });
         }
         
-        
+        /**
+         * @todo registe shortcuts
+         */
+
         
     }
 });
+
+//@todo patch post delete methods relate to btn
+//      drag drop create graph
+//      props show and enable to change
+
 

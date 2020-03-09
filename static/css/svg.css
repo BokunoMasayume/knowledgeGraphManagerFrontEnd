@@ -111,13 +111,14 @@ svg:hover #searchpath{
 * circle clip path
 */
 
-svg:hover .circleclippath{
-    stroke:rgb(122, 252, 245);
+.ldrawer>.module>.module-item:hover,svg:hover .circleclippath{
+    /* filter: blur(10px); */
+    stroke:rgb(20, 180, 20);
     stroke-width: 3px;
     fill:none;
     animation:move 3s linear forwards infinite ;
 
-    stroke-dasharray: 60%,40%;
+    stroke-dasharray: 50%,50%;
 
 }
 .circleclippath{
