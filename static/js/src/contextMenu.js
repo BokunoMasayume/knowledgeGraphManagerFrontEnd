@@ -18,8 +18,8 @@ function menuhandler(menuname,e){
     totalWrap.appendChild(menus[menuname]);
 }
 
-function registeMenu(menuname, menugen){
-    menus[menuname] = menugen(currentobj);
+function registeMenu(menuname, menugen, clickcallback){
+    menus[menuname] = menugen(currentobj , clickcallback);
 }
 
 
@@ -32,7 +32,7 @@ function testmoduleMenugen(){
     menuWrap.appendChild(menuItem);
 
     menuItem.onclick = function(){
-    console.log("module menu", currentobj);
+    console.log("module menu", currentobj);//@todo function scope is? this is ?
     }
     menuWrap.onmouseleave = function(){
         totalWrap.innerHTML = "";
