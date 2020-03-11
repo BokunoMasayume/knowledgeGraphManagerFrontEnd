@@ -10,6 +10,7 @@
         @import url("./static/css/svg.css");
         @import url("./static/css/ldrawer.css");
         @import url("./static/css/graph.css");
+        @import url("./static/css/rdrawer.css");
       
     </style>
 </head>
@@ -168,20 +169,27 @@ a
                 </svg>
             </div>
             <div class="rdrawer" v-if="current &&( current===currentModule || current=== currentNode || current === currentRelation)">
-                <div v-if="current!==null && current===currentModule">
+                <div class="rd-module" v-if="current!==null && current===currentModule">
                     <div class="title-bar">
                         <div class="avatar-area">
-                            <img :src="current.avatarUri?baseURL+'/image/'+current.avatarUri:'./static/moduleavatar.png'" >
-                            <input type="file" name="image" >
+                            <svg width="40" height="40" viewBox="0 0 50 50">
+                                <image :xlink:href="current.avatarUri?baseURL+'/image/'+current.avatarUri:'./static/moduleavatar.png'" width="50" height="50"/>
+                                <circle r="24" cx="25"  cy="25" class="circleclippath" /> 
+                                
+                            </svg>
+                            <!-- <img :src="current.avatarUri?baseURL+'/image/'+current.avatarUri:'./static/moduleavatar.png'" > -->
+                            <input @change="uploadimage($event)" class="upload-file" type="file" name="image" >
                    
                         </div>
                         <div class="title-area">
-                            {{current.labelName}}
+                            <input class='textinput' type="text" v-model="currentModule.labelName">
                         </div>
                     </div>
                     <div class="type-props">
                         <div class="type-prop-item">
+                            <div>
                             <label for="m-describe">描述</label>
+                            </div>
                             <textarea id="m-describe" v-model.trim="currentModule.describe"  placeholder="请输入模板描述信息"></textarea>
                         </div>
                         <div class="type-prop-item">
@@ -193,19 +201,93 @@ a
                         
                         </div>    
                     </div>
+                    <div class="user-prop-controller">
+                        <div id="add-module-prop">
+                            <svg viewBox="0 0 1024 1024" height="20" width="20">
+                                <path class="pluspath" d="M858.88 448H576V167.68a64 64 0 0 0-128 0V448H169.6a64 64 0 0 0 0 128H448v280.32a64 64 0 0 0 128 0V576h280.32a64 64 0 0 0 0-128z" ></path>
+                            </svg>
+                        </div>
+                        <div id="remove-module-prop">
+                            <svg viewBox="0 0 1024 1024" height="20" width="20">
+                                <path class='minuspath' d="M972.8 494.933333c0 22.755556-17.066667 45.511111-45.511111 45.511111H96.711111c-22.755556 0-45.511111-17.066667-45.511111-45.511111s17.066667-45.511111 45.511111-45.511111h836.266667c22.755556 0 39.822222 17.066667 39.822222 45.511111z"></path>
+                            </svg>
+                        </div>
+                    </div>
                     <div class="user-props">
-                        <user-prop-item v-for="(prop,name,index) in currentModule.properties" :index="index" :objprop.sync="prop.default" :propcontraint="prop.contraint">{{name}}</user-prop-item>
+                        <user-prop-item class="user-prop-item" v-for="(prop,name,index) in currentModule.properties" :index="index" :objprop.sync="prop.default" :propcontraint="prop.contraint"><div class="user-prop-name" @click="clickProp(name)">{{name}}</div></user-prop-item>
+                    </div>
+                    <div >
+                        <div id="rd-module-btn">
+                            {{currentModule.id?'修改':'添加'}}
+                        </div>
                     </div>
                 </div>
-                <div v-if="current!==null && current === currentNode">
+                <div class="rd-node" v-if="current!==null && current === currentNode">
                     <div class="title-bar">
-
+                        <div v-if="currentNode.mainLabel" class="avatar-area">
+                            <svg width="40" height="40" viewBox="0 0 50 50">
+                                <image :xlink:href="moduleMap[currentNode.mainLabel].avatarUri?baseURL+'/image/'+moduleMap[currentNode.mainLabel].avatarUri:'./static/moduleavatar.png'" width="50" height="50"/>
+                                <circle r="24" cx="25"  cy="25" class="circleclippath" /> 
+                                
+                            </svg>                   
+                        </div>
+                        <div class="title-area">
+                            {{currentNode.mainLabel}}
+                        </div>
                     </div>
                     <div class="label-pool">
-
+                        <input type="text" @change="appendNodeLabel($event)" value="" placeholder="标签">
+                        <div>
+                            <div :style="'background-color:rgb('+Math.floor(Math.random()*256)+','+ Math.floor(Math.random()*256)+','+ Math.floor(Math.random()*256)+')'" v-for="label in currentNode.labels">{{label}}</div>
+                        </div>
+                    </div>
+                    <div class="user-prop-controller">
+                        <div id="add-module-prop">
+                            <svg viewBox="0 0 1024 1024" height="20" width="20">
+                                <path class="pluspath" d="M858.88 448H576V167.68a64 64 0 0 0-128 0V448H169.6a64 64 0 0 0 0 128H448v280.32a64 64 0 0 0 128 0V576h280.32a64 64 0 0 0 0-128z" ></path>
+                            </svg>
+                        </div>
+                        <div id="remove-module-prop">
+                            <svg viewBox="0 0 1024 1024" height="20" width="20">
+                                <path class='minuspath' d="M972.8 494.933333c0 22.755556-17.066667 45.511111-45.511111 45.511111H96.711111c-22.755556 0-45.511111-17.066667-45.511111-45.511111s17.066667-45.511111 45.511111-45.511111h836.266667c22.755556 0 39.822222 17.066667 39.822222 45.511111z"></path>
+                            </svg>
+                        </div>
                     </div>
                     <div class="user-props">
-                        <user-prop-item v-for="(prop,name,index) in currentNode.properties" :index="index" :objprop.sync="currentNode.properties[name]" >{{name}}</user-prop-item>
+                        <user-prop-item class="user-prop-item" v-for="(prop,name,index) in currentNode.properties" :index="index" :objprop.sync="currentNode.properties[name]" ><div class="user-prop-name" @click="clickProp(name)">{{name}}</div></user-prop-item>
+                    </div>
+                    <div >
+                        <div id="rd-node-btn">
+                            {{currentNode.id>=0?'修改':'添加'}}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="rd-rela" v-if="current!==null && current === currentRelation">
+                    <div class="title-bar">
+                        <div class="title-area">
+                            <input type="text" placeholder="关系名称" v-model="currentRelation.relaUnit.relationName">
+                        </div>
+                    </div>
+                    <div class="user-prop-controller">
+                        <div id="add-module-prop">
+                            <svg viewBox="0 0 1024 1024" height="20" width="20">
+                                <path class="pluspath" d="M858.88 448H576V167.68a64 64 0 0 0-128 0V448H169.6a64 64 0 0 0 0 128H448v280.32a64 64 0 0 0 128 0V576h280.32a64 64 0 0 0 0-128z" ></path>
+                            </svg>
+                        </div>
+                        <div id="remove-module-prop">
+                            <svg viewBox="0 0 1024 1024" height="20" width="20">
+                                <path class='minuspath' d="M972.8 494.933333c0 22.755556-17.066667 45.511111-45.511111 45.511111H96.711111c-22.755556 0-45.511111-17.066667-45.511111-45.511111s17.066667-45.511111 45.511111-45.511111h836.266667c22.755556 0 39.822222 17.066667 39.822222 45.511111z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="user-props">
+                        <user-prop-item class="user-prop-item" v-for="(prop,name,index) in currentRelation.relaUnit.properties" :index="index" :objprop.sync="currentRelation.relaUnit.properties[name]" ><div class="user-prop-name" @click="clickProp(name)">{{name}}</div></user-prop-item>
+                    </div>
+                    <div >
+                        <div id="rd-rela-btn">
+                            {{currentRelation.relaUnit.id>=0?'修改':'添加'}}
+                        </div>
                     </div>
                 </div>
             </div>

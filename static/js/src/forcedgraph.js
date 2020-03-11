@@ -84,9 +84,10 @@ function genforceSimu(domid , ns , es){
   
     let h,w;
     svg = d3.select(domid);
-    svg.attr("i-s",function(d){
-        h = this.parentElement.offsetWidth;
-        w= this.parentElement.offsetHeight;
+    svg.attr("i-s",function(){
+        // console.log("justify center",this);
+        w = this.parentElement.offsetWidth;
+        h= this.parentElement.offsetHeight;
         return "";
     });
     let preX=null;

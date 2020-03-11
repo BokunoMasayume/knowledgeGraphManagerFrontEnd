@@ -1,0 +1,259 @@
+.rd-module .avatar-area{
+    position: relative;
+}
+.upload-file{
+    opacity: 0;
+    position: absolute;
+    /* height: 10px; */
+    top:0;
+    left:0;
+    right: 0;
+    bottom:0;
+    /* overflow: visible; */
+}
+
+.rd-module textarea{
+    outline: none;
+    color:white;
+    background-color: black;
+    border:none;
+    resize: none;
+}
+.rd-module textarea:focus{
+    border:1px solid white;
+}
+.rd-module textarea::-webkit-scrollbar{
+    width:3px;
+}
+
+.rdrawer .textinput{
+    outline: none;
+    border:none;
+    background-color: black ;
+    color:white;
+}
+.rdrawer .textinput:focus{
+    border-bottom: 1px solid white;
+}
+.rdrawer .textinput:hover{
+    border-bottom: 1px solid white;
+}
+.rdrawer{
+
+    z-index: 999;
+    background-color: black;
+    color:rgb(255, 255, 255);
+}
+.rdrawer>.rd-module{
+    padding:2% 2%;
+
+    height: 100%;
+    background-color: black;
+}
+.rdrawer .title-bar{
+    display: flex;
+    /* background-color: rgb(0, 0, 0); */
+}
+.rdrawer  .avatar-area{
+    flex: 0 1 100px;
+    max-width: 100px;
+    /* background-color: aqua; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+}
+.rdrawer .avatar-area image{
+    clip-path: circle(50%);
+}
+.rdrawer  .title-area{
+    flex:0 1 150px;
+    max-width: 150px;
+    /* background-color: antiquewhite; */
+    display: flex;
+    align-items: center;
+    color:white;
+}
+
+.rd-module>div{
+    /* margin: 10px 0; */
+    padding:15px 0 ;
+    border-bottom: 1px solid rgb(4, 59, 56);
+}
+
+/* csstag module props */
+.rd-module .type-props{
+    /* margin-top: 20px; */
+}
+
+.rd-module .type-props .type-prop-item{
+    display: flex;
+    justify-content: space-around;
+    margin-top: 10px;
+}
+
+/* csstag user props*/ 
+.rdrawer .user-props{
+    /* margin-top: 20px; */
+    display: flex;
+    flex-direction: column;
+    color:white;
+}
+
+.rdrawer .user-props input{
+    outline: none;
+    border:none;
+    background-color: black ;
+    color:white;
+    width: 100px;
+    text-align: center;
+}
+
+.rdrawer .user-props input:hover{
+    border-bottom: 1px solid white;
+}
+.rdrawer .user-props input:focus{
+    border-bottom: 1px solid white;
+}
+
+.rdrawer .user-prop-item{
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 10px;
+}
+.rdrawer .user-prop-item>div{
+    /*boolean type*/
+    display: flex;
+    justify-content: space-evenly;
+    max-width: 55%;
+}
+
+.rdrawer .user-prop-item select{
+    border:none;
+    background-color: black;
+    color:rgb(255, 255, 255);
+}
+.rdrawer .user-prop-item select:hover{
+    border:none;
+    border-bottom: 1px solid white;
+}
+
+.rd-module #rd-module-btn{
+    min-width: 100px;
+    text-align: center;
+    padding:10px ;
+    margin:0 20%;
+    border:1px solid rgb(1, 174, 255);
+    letter-spacing: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.rd-module #rd-module-btn:hover{
+    background-color: rgb(1, 174, 255);
+}
+
+.rdrawer .user-prop-controller{
+    /* background-color: rgb(4, 59, 56); */
+    display: flex;
+    justify-content: flex-end;
+    padding: 5px 10px;
+    border:none;
+}
+.rdrawer .user-prop-controller>div{
+    margin-right: 15px;
+}
+
+/** csstag node style*/
+.rd-node{
+    background-color: black;
+    height: 100%;
+}
+.rd-node>div{
+    /* margin: 10px 0; */
+    padding:15px 0 ;
+    border-bottom: 1px solid rgb(4, 59, 56);
+}
+.rd-node .label-pool{
+    height:30%;
+    min-height: 50px;
+    max-height: 100px;
+    border-top:2px solid rgba(5, 183, 253, 0.767);
+    border-bottom:2px solid rgba(5, 183, 253, 0.767);
+}
+.rd-node .label-pool input{
+    width:100%;
+    outline:none;
+    background-color: black;
+    color:white;
+    border:none;
+    margin: 0 5px;
+}
+.rd-node .label-pool>div{
+    display: flex;
+    flex-wrap: wrap;
+    /* justify-content: space-evenly; */
+}
+.rd-node .label-pool>div>div{
+    width:40%;
+    cursor: pointer;
+    overflow: hidden;
+    margin:5px;
+}
+.rd-node #rd-node-btn{
+    min-width: 100px;
+    text-align: center;
+    padding:10px ;
+    margin:0 20%;
+    border:1px solid rgb(1, 174, 255);
+    letter-spacing: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.rd-node #rd-node-btn:hover{
+    background-color: rgb(1, 174, 255);
+}
+
+
+/** csstag relation style*/
+.rd-rela{
+    height: 100%;
+    background-color: black;
+    padding:5% 0;
+}
+.rd-rela>div{
+    /* margin: 10px 0; */
+    padding:15px 0 ;
+    border-bottom: 1px solid rgb(4, 59, 56);
+}
+.rd-rela .title-bar input{
+    background-color: black;
+    color: white;
+    border:none;
+    outline:none;
+    text-align: center;
+    font-size: large;
+    font-weight: bold;
+}
+.rd-rela .title-bar input:focus{
+    border-bottom: 1px solid white;
+}
+.rd-rela .title-bar input:hover{
+    border-bottom: 1px solid white;
+}
+
+.rd-rela .title-bar{
+    margin-bottom:20%;
+}
+.rd-rela #rd-rela-btn{
+    min-width: 100px;
+    text-align: center;
+    padding:10px ;
+    margin:0 20%;
+    border:1px solid rgb(1, 174, 255);
+    letter-spacing: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.rd-rela #rd-rela-btn:hover{
+    background-color: rgb(1, 174, 255);
+}

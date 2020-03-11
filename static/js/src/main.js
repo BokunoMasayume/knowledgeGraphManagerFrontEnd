@@ -41,7 +41,9 @@ window.app = new Vue({
         },
 
         currentFileEle :null,
+        // currentFolderEle:null,
 
+        currentProp :null,
 
         currentFile:null,
         currentFolder:null,
@@ -106,12 +108,19 @@ window.app = new Vue({
     },
     
     methods:{
+        clickProp:function(name){
+            this.currentProp = name;
+        },
         clickNode:function(nodeobj){
+            this.currentProp = null;
+
             this.currentNode = nodeobj;
             this.current = nodeobj;
             // console.log("click node",nodeobj);
         },
         clickRela:function(relaobj){
+            this.currentProp = null;
+
             this.currentRelation = relaobj;
             this.current = relaobj;
         },
@@ -121,13 +130,18 @@ window.app = new Vue({
             
         },
         clickModule:function(moduleobj){
+            this.currentProp = null;
+
             // console.log(this);
             this.current = moduleobj;
             this.currentModule  = moduleobj;
         },
-        clickFile:function(fileobj){
+        clickFile:function(fileobj ,e){
+            this.currentProp = null;
+
             // console.log(this);
             this.current = fileobj;
+            this.currentFileEle = e.currentTarget;
 
             if(fileobj.folder){
                 this.currentFolder = fileobj;
@@ -230,8 +244,15 @@ window.app = new Vue({
             return this.userFiles.filter((ele)=>{
                 return ele.parentId === fileid;
             });
-        }
+        },
+        //TODO upload image function 
+        uploadimage:function(e){
+            console.log("file",e);
+        },
 
+        appendNodeLabel:function(e){
+            this.currentNode.labels.push(e.target.value);
+        }
 
     
     },
@@ -244,8 +265,8 @@ window.app = new Vue({
                 <label :for="'user-module-prop'+index"><slot></slot></label>
                 <input v-if=" propcontraint==='number' || typeof objprop ==='number' || objprop instanceof Number" type="number" :id="'user-module-prop'+index"  :value="objprop" @change="$emit('update:objprop',new Number($event.target.value))">
                 <div v-else-if="propcontraint==='boolean' || typeof objprop ==='boolean' || objprop instanceof Boolean" >
-                    <input type='radio' :id="'user-module-prop-true'+index"  :checked="objprop"  @change="$emit('update:objprop',$event.target.checked)"></input>
-                    <input type='radio' :id="'user-module-prop-false'+index"  :checked="!objprop" @change="$emit('update:objprop',!$event.target.checked)"></input>
+                   是 <input type='radio' :id="'user-module-prop-true'+index"  :checked="objprop"  @change="$emit('update:objprop',$event.target.checked)"></input>
+                    否 <input type='radio' :id="'user-module-prop-false'+index"  :checked="!objprop" @change="$emit('update:objprop',!$event.target.checked)"></input>
                 </div>
                 <input v-else :id="'user-module-prop'+index"  :value="objprop" @change="$emit('update:objprop',$event.target.value)"></input>
                 <select v-if="propcontraint" v-model='propcontraint'>
@@ -266,7 +287,7 @@ window.app = new Vue({
         "module-item":{
             name:"module-item",
             template:`
-                <div @contextmenu="testmenu(moduleobj, $event)" @click="clickModule(moduleobj);" @dragstart="dragmodule(moduleobj,$event)" :class="{'module-item':true, 'focus':$root.currentModule && $root.currentModule.id===moduleobj.id}">
+                <div @contextmenu="testmenu(moduleobj, $event)" @click.stop="clickModule(moduleobj);" @dragstart="dragmodule(moduleobj,$event)" :class="{'module-item':true, 'focus':$root.currentModule && $root.currentModule.id===moduleobj.id}">
                     <div class='avatar'>
                         <svg width="30" height="30" viewBox="0 0 50 50">
                             <image :xlink:href="moduleobj.avatarUri?$root.baseURL+'/image/'+moduleobj.avatarUri:'./static/moduleavatar.png'" width="50" height="50" />
@@ -294,7 +315,7 @@ window.app = new Vue({
             name:"file-tree-item",
             template:`
                 <div :class="{ 'focus':isCurrent(fileobj.id) , 'file-tree-item':true, 'file-tree-folder':fileobj.folder, 'file-tree-file':!fileobj.folder}">
-                    <div @click.stop="clickFile(fileobj);foldChildren = !foldChildren" class="file-tree-node">
+                    <div @click.stop="clickFile(fileobj,$event);foldChildren = !foldChildren" class="file-tree-node">
                         <svg viewBox="-100 -100 1024 1024" width="20" height="20">
 <path v-if='!fileobj.folder' class='fileicon' d="M733.6228025 357.50476098L604.7119751 228.65325904V357.50476098h128.9108274zM542.89904809 419.30285644V203.00952125h-247.19238329c-8.68634009 0-16.01806641 2.98608422-21.96551513 8.96319604-5.96228028 5.97216773-8.92858886 13.28411842-8.92858888 21.93585205v556.18286133c0 8.65173364 2.96630859 16.06750512 8.92858888 21.94079613 5.94250464 5.97216773 13.27917504 8.95825195 21.96057176 8.95825195h432.59655714c8.71105981 0 16.02795386-2.98608422 21.98034668-8.96319604 5.92272973-5.86834693 8.90881324-13.28411842 8.90881396-21.93585204v-370.78857422H542.89904809zM295.72149634 141.21142578h308.99047876L820.99047875 357.50476098v432.58666968c0 25.54486108-9.04724122 47.48071313-27.14172363 65.50598122-18.10931396 18.1290896-39.9462893 27.19116234-65.55541992 27.19116234h-432.5866704c-25.56958008 0-47.42633033-9.06207276-65.5356443-27.19116234C212.06170654 837.57214379 203.00952125 815.63629174 203.00952125 790.09143067V233.90856933C203.00952125 208.36370826 212.06170654 186.53167701 230.1710205 168.40258813S270.13708472 141.21142578 295.7066648 141.21142578h0.01977563z" ></path>
 <path v-if='fileobj.folder' class='foldericon' d="M807.86 256.55H542v-38.56c0-66.17-53.83-120-120-120H131.17c-16.54 0-29.97 13.39-30 29.94l-0.41 203.56c0 1.5 0.11 2.98 0.32 4.43l-0.9 467.44c0 66.17 53.83 120 120 120h587.69c66.17 0 120-53.83 120-120V376.55c-0.01-66.16-53.84-120-120.01-120zM422 157.99c33.08 0 60 26.92 60 60v38.56H160.91l0.2-98.56H422z m445.86 645.37c0 33.08-26.92 60-60 60H220.17c-33.08 0-60-26.92-60-59.94l0.94-486.87h646.75c33.08 0 60 26.92 60 60v426.81z" ></path>

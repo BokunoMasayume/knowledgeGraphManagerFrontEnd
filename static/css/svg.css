@@ -240,7 +240,7 @@ svg:hover #searchpath{
     }
     50%{
         stroke-dashoffset: 50%;
-        stroke-dasharray: 70%,30%;
+        stroke-dasharray: 0%,100%;
     }
     100%{
         /* stroke-dasharray: 5000px 500px; */
@@ -250,4 +250,46 @@ svg:hover #searchpath{
 
     }
 
+}
+
+/** csstag plus icon style*/
+.pluspath{
+    /* fill:none; */
+    /* stroke:rgb(9, 253, 241); */
+    /* stroke-width: 10px; */
+
+    fill:rgb(5, 83, 78);
+
+}
+
+.rdrawer .user-prop-controller>div:hover .pluspath{
+    stroke:rgb(122, 252, 245);
+    stroke-width: 15px;
+    /* fill:none; */
+    /* animation:move 3s linear forwards infinite ; */
+
+    /* stroke-dasharray: 50%,50%; */
+
+    fill:rgb(122, 252, 245);
+}
+
+/** csstag minus icon style*/
+.minuspath{
+    /* fill:none; */
+    /* stroke:rgb(9, 253, 241); */
+    /* stroke-width: 10px; */
+
+    fill:rgb(5, 83, 78);
+
+}
+
+.rdrawer .user-prop-controller>div:hover .minuspath{
+    stroke:rgb(122, 252, 245);
+    stroke-width: 15px;
+    /* fill:none; */
+    /* animation:move 3s linear forwards infinite ; */
+
+    /* stroke-dasharray: 50%,50%; */
+
+    fill:rgb(122, 252, 245);
 }
