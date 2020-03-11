@@ -16,6 +16,7 @@ function menuhandler(menuname,e){
     menus[menuname].style.left = e.clientX+"px";
 
     totalWrap.appendChild(menus[menuname]);
+    
 }
 
 function registeMenu(menuname, menugen, clickcallback){
@@ -23,16 +24,17 @@ function registeMenu(menuname, menugen, clickcallback){
 }
 
 
-function testmoduleMenugen(){
+function moduleMenugen(){
     let menuWrap = document.createElement('div');
     menuWrap.classList.add("menu-wrap");
-    let menuItem = document.createElement('div');
-    menuItem.classList.add('menu-item');
-    menuItem.innerText = "mmmmmmmmm";
-    menuWrap.appendChild(menuItem);
+    let menuDeleItem = document.createElement('div');
+    menuDeleItem.classList.add('menu-item');
+    menuDeleItem.innerText = "删除模板";
+    menuWrap.appendChild(menuDeleItem);
 
-    menuItem.onclick = function(){
-    console.log("module menu", currentobj);//@todo function scope is? this is ?
+    menuDeleItem.onclick = function(){
+        //@todo function scope is? 'this' is ?
+        console.log("in real will delete ",currentobj);
     }
     menuWrap.onmouseleave = function(){
         totalWrap.innerHTML = "";
@@ -40,6 +42,6 @@ function testmoduleMenugen(){
     return menuWrap;
 }
 
-menus.modulemenu = testmoduleMenugen();
+menus.modulemenu = moduleMenugen();
 
 export default {setCurrentObj , menuhandler,registeMenu};

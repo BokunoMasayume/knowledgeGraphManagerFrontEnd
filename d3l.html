@@ -15,62 +15,152 @@
 
 
          <script>
+            // var nodes = [
+            //     {main:"allen walker"},
+            //     {main:"mushroom"},
+            //     {main:"masayume"},
+            //     {main:"jojo"},
+            //     {main:"fujiyokan"},
+            //     {main:"F.F."}
+            // ];
             var nodes = [
-                {main:"allen walker"},
-                {main:"mushroom"},
-                {main:"masayume"},
-                {main:"jojo"},
-                {main:"fujiyokan"},
-                {main:"F.F."}
-            ];
+    {
+        "id": 13,
+        "labels": [
+            "testmain1",
+            "F5e4802af6278bd3ebf72a300",
+            "test1",
+            "U5e46bb31afe811358c43522c"
+        ],
+        "properties": {
+            "country": "grama",
+            "name": "Allen"
+        },
+        "mainLabel": "testmain1",
+        "delete": false
+    },
+    {
+        "id": 17,
+        "labels": [
+            "F5e4802af6278bd3ebf72a300",
+            "U5e46bb31afe811358c43522c",
+            "firstModule"
+        ],
+        "properties": {
+            "country": "grama",
+            "name": "Allen",
+            "anumber": 45
+        },
+        "mainLabel": "firstModule",
+        "delete": false
+    },
+    {
+        "id": 20,
+        "labels": [
+            "F5e4802af6278bd3ebf72a300",
+            "U5e46bb31afe811358c43522c",
+            "firstModule"
+        ],
+        "properties": {
+            "country": "grama",
+            "proptest": true,
+            "name": "Kanda"
+        },
+        "mainLabel": "firstModule",
+        "delete": false
+    }
+]; 
 
-            var edges = [
-                {source:0,target:2,relation:"typeA"},
-                {source:0,target:4,relation:"typeA"},
-                {source:0,target:5,relation:"typeA"},
-                {source:1,target:3,relation:"typeA"},
-                {source:1,target:2,relation:"typeC"},
-                {source:4,target:5,relation:"typeA"},
-                {source:3,target:4,relation:"typeB"},
-                {source:3,target:2,relation:"typeB"},
-                {source:3,target:0,relation:"typeA"},
-                {source:5,target:2,relation:"typeA"}
+            var edges =[
+    {
+        "relaUnit": {
+            "id": 10,
+            "relationName": "testrname",
+            "properties": {
+                "bb": "sdfdsf",
+                "aa": "aa",
+                "dfds": 444.0,
+                "jjki": true
+            },
+            "delete": false
+        },
+        "source": 17,
+        "target": 20
+    },
+    {
+        "relaUnit": {
+            "id": 9,
+            "relationName": "testrname",
+            "properties": {
+                "aa": "aa"
+            },
+            "delete": false
+        },
+        "source": 17,
+        "target": 13
+    }
+]
+            //  [
+            //     {source:0,target:2,relation:"typeA"},
+            //     {source:0,target:4,relation:"typeA"},
+            //     {source:0,target:5,relation:"typeA"},
+            //     {source:1,target:3,relation:"typeA"},
+            //     {source:1,target:2,relation:"typeC"},
+            //     {source:4,target:5,relation:"typeA"},
+            //     {source:3,target:4,relation:"typeB"},
+            //     {source:3,target:2,relation:"typeB"},
+            //     {source:3,target:0,relation:"typeA"},
+            //     {source:5,target:2,relation:"typeA"}
 
-            ];
+            // ];
 
             function ticked(){
-                links.attr("x1",function(d,i){
-                    return d.source.x;
-                }).attr("y1", function(d,i){
-                    return d.source.y;
-                }).attr("x2" , function(d,i){
-                    return d.target.x;
-                }).attr("y2" , function(d,i){
-                    return d.target.y;
-                })
+                // links.attr("x1",function(d,i){
+                //     return d.source.x;
+                // }).attr("y1", function(d,i){
+                //     return d.source.y;
+                // }).attr("x2" , function(d,i){
+                //     return d.target.x;
+                // }).attr("y2" , function(d,i){
+                //     return d.target.y;
+                // })
 
-                linksText.attr("x" , function(d,i){
-                    return (d.source.x+d.target.x) / 2;
-                }).attr("y", function(d,i){
-                    return (d.source.y + d.target.y) / 2;
-                }).attr("transform", function(d){
-                    return "rotate("+Math.atan2(Math.abs(d.target.y-d.source.y) , Math.abs(d.target.x-d.source.x))*180/Math.PI+","+(d.source.x+d.target.x) / 2+","+(d.source.y + d.target.y) / 2+")";
-                })
-
+                // linksText.attr("x" , function(d,i){
+                //     return (d.source.x+d.target.x) / 2;
+                // }).attr("y", function(d,i){
+                //     return (d.source.y + d.target.y) / 2;
+                // }).attr("transform", function(d){
+                //     return "rotate("+Math.atan2(Math.abs(d.target.y-d.source.y) , Math.abs(d.target.x-d.source.x))*180/Math.PI+","+(d.source.x+d.target.x) / 2+","+(d.source.y + d.target.y) / 2+")";
+                // })
+                
                 gs.attr("transform" , function(d, i){
+                    if(d.graphDele){
+                        console.log(this ,d.graphDele);
+                        this.parentElement.removeChild(this);
+                        nodes.splice(i-1,1);
+                        forceSimu.nodes(nodes);
+                        // return;
+                    }
+                    
                     return "translate("+ d.x+","+d.y+")";
                 })
             }
             function started(d){
-                forceSimu.alpha(1).restart();
+                forceSimu.alphaTarget(0.3).restart();
+                // forceSimu.alpha(0).resctart();
                 d.fx = d.x;
                 d.fy = d.y;
             }
             function dragged(d){
+                // forceSimu.alpha(0).restart();
+
                 d.fx = d3.event.x;
                 d.fy = d3.event.y;
             }
             function ended(d){
+                forceSimu.alphaTarget(0);
+                // forceSimu.alpha(1).restart();
+
                 d.fx = null;
                 d.fy = null;
             }
@@ -79,15 +169,16 @@
             var height = svg.attr("height");
 
             var forceSimu = d3.forceSimulation()
-                              .force("link" , d3.forceLink())
+                              .force("link" , d3.forceLink().id((d)=>{return d.id;}).iterations(10))
                               .force("charge", d3.forceManyBody())
                               .force("center",d3.forceCenter())
-                              .force("collision" , d3.forceCollide(70))
+                            //   .force("collision" , d3.forceCollide(30).iterations(10))
+                              
             forceSimu.nodes(nodes).on("tick",ticked);
 
-            // forceSimu.force("charge").distanceMax(100)
+            // forceSimu.force("charge").distanceMin(200).distanceMax(2000);
 
-            forceSimu.force("link").links(edges);
+            forceSimu.force("link").links(edges).distance(100)
 
             forceSimu.force("center").x(width/2).y(height/2);
 
@@ -99,21 +190,24 @@
                 .data(edges)
                 .enter()
                 .append("line")
-                .attr("stroke" , "#757474")
+                .attr("stroke" , function(d){
+                    // console.log(d,this);
+                    return "#000";
+                })
                 .attr("stroke-width" , 1)
 
             var linksText = svg.append("g")
-                .selectAll("text")
+                .selectAll(".text")
                 .data(edges)
                 .enter()
                 .append("text")
                 .style("text-anchor", "middle")
                 .text(function(d,i){
-                    return d.relation;
+                    return d.relaUnit.relationName;
                 });
 
             
-            var gs = svg.selectAll(".circeTe")
+            var gs = svg.selectAll(".circee")
                         .data(nodes)
                         .enter()
                         .append("g")
@@ -126,21 +220,24 @@
                             .on("end" , ended)
                         )
 
-            gs.append("image")
-              .attr("xlink:href","./static/module.png")
-              .attr("width",40)
+            gs.append("circle")
+              .attr("r" ,5)
 
-            gs.append("text")
-              .style("text-anchor", "middle")
-              .attr("x" , 20)
-              .attr("y",45)
-              .text(function(d,i){
-                  return d.main;
-              })
+            // gs.append("text")
+            //   .style("text-anchor", "middle")
+            //   .attr("x" , 20)
+            //   .attr("y",45)
+            //   .text(function(d,i){
+            //       return d.main;
+            //   })
 
               gs.on("click", function(d){
                   alert(d.index)
               });
+              console.log(forceSimu);
+            //   setTimeout(function(){
+            //     forceSimu.force("center").x(width/3).y(height/4);
+            //   },3000);
          </script>
 	</body>
 </html>

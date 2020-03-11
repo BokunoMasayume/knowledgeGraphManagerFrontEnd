@@ -1,0 +1,40 @@
+#main{
+    position: fixed;
+    z-index:1;
+}
+.edge{
+    cursor: pointer;
+}
+.edge .edgeline{
+    stroke: rgba(2, 31, 54, 0.897);
+    /* stroke-dasharray: 20% 40% 20%; */
+    /* stroke-width: 5px; */
+}
+
+.edge .edgetext{
+    /* alignment-baseline:after-edge; */
+    dominant-baseline:central;
+
+}
+.edge .edgetext>textPath{
+    /* dominant-baseline:central; */
+    /* stroke:blue; */
+}
+.edge:hover .edgeline{
+    stroke:rgb(255, 81, 0,0);
+}
+.edge:hover .edgetext{
+    stroke:rgb(255, 81, 0);
+
+}
+.node{
+    cursor: pointer;
+}
+.node .imageborder{
+    /* clip-path: url(#circlepath); */
+    fill:none;
+    stroke:rgb(255, 255, 255);
+}
+.node:hover .imageborder{
+    stroke: rgb(240, 55, 22);
+}

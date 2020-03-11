@@ -1,20 +1,127 @@
+/**csstag file icon style*/
+.file-tree-node:hover .fileicon{
+    stroke:none;
+    fill:rgb(122, 252, 245);
+    stroke-width: 20px;
+
+}
+.fileicon{
+    fill:rgb(6, 141, 134);
+    stroke:none;
+    stroke-width: 20px;
+}
+
+/**csstag folder icon style*/
+.file-tree-node:hover .foldericon{
+    stroke:none;
+    fill:rgb(122, 252, 245);
+    stroke-width: 20px;
+
+}
+.foldericon{
+    fill:rgb(6, 141, 134);
+    stroke:none;
+    stroke-width: 20px;
+}
+
+/** csstag add folder icon style*/
+.filetree>.control-bar>.add-folder #folderaddpath{
+    /* fill:none; */
+    /* stroke:rgb(9, 253, 241); */
+    /* stroke-width: 10px; */
+
+    fill:rgb(5, 83, 78);
+
+}
+
+.filetree>.control-bar>.add-folder:hover #folderaddpath{
+    stroke:rgb(122, 252, 245);
+    stroke-width: 15px;
+    /* fill:none; */
+    /* animation:move 3s linear forwards infinite ; */
+
+    /* stroke-dasharray: 50%,50%; */
+
+    fill:rgb(122, 252, 245);
+}
+
+/** csstag add file icon style*/
+.filetree>.control-bar>.add-file #fileaddpath{
+   
+
+    fill:rgb(5, 83, 78);
+
+}
+
+.filetree>.control-bar>.add-file:hover #fileaddpath{
+    stroke:rgb(122, 252, 245);
+    stroke-width: 15px;
+  
+
+    fill:rgb(122, 252, 245);
+}
+/**csstag remove file or folder icon style*/
+.filetree>.control-bar>.delete #deletepath{
+   
+
+    fill:rgb(5, 83, 78);
+
+}
+
+.filetree>.control-bar>.delete:hover #deletepath{
+    stroke:rgb(122, 252, 245);
+    stroke-width: 15px;
+  
+
+    fill:rgb(122, 252, 245);
+}
+
+/**csstag refresh file tree icon style*/
+.filetree>.control-bar>.refresh #refreshpath{
+   
+
+    fill:rgb(5, 83, 78);
+
+}
+
+.filetree>.control-bar>.refresh:hover #refreshpath{
+    stroke:rgb(122, 252, 245);
+    stroke-width: 15px;
+  
+
+    fill:rgb(122, 252, 245);
+}
+
+#refreshpath.refreshing{
+    transform-origin: 50% 50%;
+    animation: refreshing 1s infinite linear;
+}
+@keyframes refreshing{
+    0%{
+        transform: rotate(0deg);
+    }
+    100%{
+        transform: rotate(360deg);
+    }
+}
+
+
 /**
-* file tree
+* csstag lbar file tree button style
 */
 svg:hover #filetreepath{
     stroke:rgb(122, 252, 245);
-    stroke-width: 5px;
     fill:none;
     animation:move 3s linear forwards infinite ;
 
     stroke-dasharray: 60%,40%;
-    stroke-width: 10px;
+    stroke-width: 20px;
 
 }
 #filetreepath{
     fill:none;
     stroke:rgb(6, 141, 134);
-    stroke-width: 10px;
+    stroke-width: 20px;
 }
 .focus>svg>#filetreepath{
     stroke:rgb(33, 252, 241);
@@ -35,21 +142,20 @@ svg:hover #filetreepath{
 
 
 /**
-* module
+* csstag lbar module button style
 */
 svg:hover #modulepath{
     stroke:rgb(122, 252, 245);
-    stroke-width: 5px;
     fill:none;
     animation:move 3s linear forwards infinite ;
 
     stroke-dasharray: 60%,40%;
-    stroke-width: 10px;
+    stroke-width: 20px;
 
 }
 #modulepath{
     fill:none;
-    stroke-width: 10px;
+    stroke-width: 20px;
     stroke:rgb(6, 141, 134);
 
 }
@@ -71,22 +177,21 @@ svg:hover #modulepath{
 }
 
 /**
-* search
+* csstag lbar search button style
 */
 svg:hover #searchpath{
     stroke:rgb(122, 252, 245);
-    stroke-width: 5px;
     fill:none;
     animation:move 3s linear forwards infinite ;
 
     stroke-dasharray: 60%,40%;
     
-    stroke-width: 10px;
+    stroke-width: 20px;
 
 }
 #searchpath{
     fill:none;
-    stroke-width: 10px;
+    stroke-width: 20px;
     stroke:rgb(6, 141, 134);
 
 }
@@ -108,33 +213,41 @@ svg:hover #searchpath{
 }
 
 /**
-* circle clip path
+* csstag  circle clip path 
 */
 
 .ldrawer>.module>.module-item:hover,svg:hover .circleclippath{
     /* filter: blur(10px); */
-    stroke:rgb(20, 180, 20);
-    stroke-width: 3px;
+    stroke:rgb(73, 241, 233);
+    stroke-width: 2px;
     fill:none;
-    animation:move 3s linear forwards infinite ;
+    animation:move 1s linear  infinite ;
 
-    stroke-dasharray: 50%,50%;
+    stroke-dasharray: 70%,30%;
 
 }
 .circleclippath{
     fill:none;
-    stroke:rgb(9, 253, 241);
+    stroke:rgb(5, 5, 5);
 }
 @keyframes move{
     0%{
         /* stroke-dasharray: 0,5000px; */
         /* stroke-dasharray: 0,100%; */
         stroke-dashoffset: 0%;
+    stroke-dasharray: 100%,0%;
+
+    }
+    50%{
+        stroke-dashoffset: 50%;
+        stroke-dasharray: 70%,30%;
     }
     100%{
         /* stroke-dasharray: 5000px 500px; */
         /* stroke-dasharray: 100% 0; */
         stroke-dashoffset: 100%;
+    stroke-dasharray: 100%,0%;
+
     }
 
 }

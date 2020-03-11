@@ -1,9 +1,11 @@
+/* .ldrawer{
+    min-width: 250px;
+} */
 .ldrawer>div{
     height: 100%;
+    min-width: 230px;
 }
-.ldrawer>.filetree{
-    background-color: blue;
-}
+
 .ldrawer>.module{
     background-color: aqua;
 }
@@ -26,14 +28,56 @@
     animation: drawin .5s ;
 }
 
-/**
-* 模板
-*/
+/**csstag  文件树样式*/
+.ldrawer>.filetree{
+    background-color: rgba(0, 0, 0,1);
+    padding:3%;
+    color:rgb(254, 255, 255);
+    /* font-size: small; */
+    font-weight: lighter;
+}
+.ldrawer .file-tree-item{
+    margin:0 5%;
+    white-space: nowrap;
+}
+.ldrawer .file-tree-node{
+    overflow: hidden;
+
+}
+.ldrawer .file-tree-node:hover{
+    font-weight: normal;
+    cursor: pointer;
+
+    overflow: visible;
+
+}
+
+.ldrawer .focus>.file-tree-node{
+    outline:2px dashed rgb(3, 43, 40);
+}
+
+.filetree>.control-bar{
+    padding:3% 1%;
+    display: flex;
+    justify-content: flex-end;
+
+    /* bottom: 2px solid rgb(3, 43, 40); */
+}
+.filetree>.control-bar>div{
+    margin-left: 5%;
+    cursor: pointer;
+}
+
+
+/**csstag  模板样式 */
 .ldrawer>.module{
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
     align-content: flex-start;
+
+    background-color: rgba(0, 0, 0,1);
+
 }
 .ldrawer>.module image{
     clip-path: circle(50%);
@@ -44,13 +88,25 @@
     flex-direction: column;
     align-items: center;
     padding:5px;
+    margin:3%;
+    max-width: 50px;
 
-    background-color: beige;
+    overflow: hidden;
+
+    color:rgb(255, 255, 255)
+
+    /* background-color: beige; */
 }
 .ldrawer>.module>.module-item:hover{
-    color:rgb(0, 255, 157);
+    overflow: visible;
+    background-color: rgba(31, 31, 31,.9);
 }
 
+.ldrawer>.module>.module-item:hover .labelname{
+    background-color: rgb(151, 44, 44);
+    z-index:999;
+    padding:0 4px;
+}
 .ldrawer>.module>.module-item>.labelname{
     font-size: smaller;
 }
