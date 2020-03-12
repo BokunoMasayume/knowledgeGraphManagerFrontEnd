@@ -1,19 +1,26 @@
+.graph-canvas{
+    background-color: black;
+}
 #main{
     position: fixed;
     z-index:1;
+    background-color: black;
+
+
 }
 .edge{
     cursor: pointer;
 }
 .edge .edgeline{
-    stroke: rgba(2, 31, 54, 0.897);
+    stroke: rgb(9, 109, 190);
     /* stroke-dasharray: 20% 40% 20%; */
-    /* stroke-width: 5px; */
+    stroke-width: 2px;
 }
 
 .edge .edgetext{
     /* alignment-baseline:after-edge; */
     dominant-baseline:central;
+    fill:white;
 
 }
 .edge .edgetext>textPath{
@@ -24,7 +31,7 @@
     stroke:rgb(255, 81, 0,0);
 }
 .edge:hover .edgetext{
-    stroke:rgb(255, 81, 0);
+    fill:rgb(255, 81, 0);
 
 }
 .node{

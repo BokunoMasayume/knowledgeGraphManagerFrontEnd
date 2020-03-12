@@ -1,3 +1,8 @@
+.rdrawer{
+    border-left:1px solid rgb(3, 43, 40);
+    overflow: hidden;
+    background-color: black;
+}
 .rd-module .avatar-area{
     position: relative;
 }
@@ -105,7 +110,7 @@
     border:none;
     background-color: black ;
     color:white;
-    width: 100px;
+    width: 80px;
     text-align: center;
 }
 
@@ -122,10 +127,14 @@
     margin-top: 10px;
 }
 .rdrawer .user-prop-item>div{
+    /* display: flex;
+    justify-content: center;
+    max-width: 55%; */
+    max-width:33%;
+}
+.rdrawer .user-prop-item>div>div{
     /*boolean type*/
     display: flex;
-    justify-content: space-evenly;
-    max-width: 55%;
 }
 
 .rdrawer .user-prop-item select{

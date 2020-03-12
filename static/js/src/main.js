@@ -12,7 +12,7 @@ addFileBar.addEventListener('click',function(e){
 let input = document.createElement('input')
 input.setAttribute('type' , 'text');
 input.addEventListener('change' , function(e){
-    app.appendFile(e.target.value);
+    app.appendFile(e.target.value.trim());
 })
 addFileBar.appendChild(input);
 
@@ -26,7 +26,7 @@ addFolderBar.addEventListener('click',function(e){
 let input2 = document.createElement('input')
 input2.setAttribute('type' , 'text');
 input2.addEventListener('change',function(e){
-    app.appendFolder(e.target.value);
+    app.appendFolder(e.target.value.trim());
 })
 addFolderBar.appendChild(input2);
 
@@ -35,7 +35,8 @@ addPropBar.setAttribute('id','add-prop-bar');
 let input3 = document.createElement('input');
 input3.setAttribute('type' , 'text');
 input3.addEventListener('change',function(e){
-    app.appendProp(e.target.value);
+    console.log("changed prop",e.target.value.trim());
+    app.appendProp(e.target.value.trim());
 })
 addPropBar.appendChild(input3);
 
@@ -104,6 +105,22 @@ window.app = new Vue({
             module.forEach((e)=>{
                 this.moduleMap[e.labelName] = e;
             })
+        },
+        current:function(newcur){
+            if(newcur !== this.currentFile && newcur !== this.currentFolder){
+                if(addFileBar.parentElement)addFileBar.parentElement.removeChild(addFileBar);
+                if(addFolderBar.parentElement)addFolderBar.parentElement.removeChild(addFolderBar);
+              
+            }
+            this.currentProp = null;
+        },
+        ldrawerContent(){
+            if(addFileBar.parentElement)addFileBar.parentElement.removeChild(addFileBar);
+            if(addFolderBar.parentElement)addFolderBar.parentElement.removeChild(addFolderBar);
+            if(addPropBar.parentElement)addPropBar.parentElement.removeChild(addPropBar);  
+        },
+        currentRelationName(){
+            forcedgraph.updateSimu( this.graphnodes , this.graphrelations,true);
         }
     },
 
@@ -129,6 +146,10 @@ window.app = new Vue({
                 }
             }
             return this.input.uname==='' || this.input.pword===''||(!this.visibleHandler.islogin &&this.input.pword!==this.input.pwordrep);
+        },
+
+        currentRelationName:function(){
+            return this.currentRelation?this.currentRelation.relaUnit.relationName:null;
         }
             
     },
@@ -282,6 +303,14 @@ window.app = new Vue({
         //TODO upload image function 
         uploadimage:function(e){
             console.log("file",e);
+            requireHandler.image.updateModule(this.currentModule.id,e.target.files[0])
+            .then((response)=>{
+                if(response.data){
+                    Vue.set(this.currentModule,"avatarUri",response.data);
+                }
+            }).catch((err)=>{
+                alert("上传文件失败");
+            })
         },
 
         appendNodeLabel:function(e){
@@ -314,7 +343,7 @@ window.app = new Vue({
             if(addFileBar.parentElement)addFileBar.parentElement.removeChild(addFileBar);
             if(addFolderBar.parentElement)addFolderBar.parentElement.removeChild(addFolderBar);
             
-            if(this.current===null){
+            if(this.currentFileEle===null){
                 document.querySelector('.filetree').appendChild(addFileBar);
             }else if(this.current=== this.currentFile){
                 //have same parent
@@ -385,10 +414,90 @@ window.app = new Vue({
         showPropBar:function(){
             if(addPropBar.parentElement)addPropBar.parentElement.removeChild(addPropBar);
 
-            if(this.current && )
+            if(this.current && this.current ===this.currentModule){
+                document.querySelector('.rd-module').querySelector('.user-props').appendChild(addPropBar);
+
+            }else if( this.current && this.current=== this.currentNode){
+                document.querySelector('.rd-node').querySelector('.user-props').appendChild(addPropBar);
+
+            }else if(this.current && this.current === this.currentRelation){
+                document.querySelector('.rd-rela').querySelector('.user-props').appendChild(addPropBar);
+            }
+        },
+        appendProp:function(propname){
+            if(this.current && this.current ===this.currentModule){
+                // console.log(">>>",propname)
+                if(!this.currentModule.properties)Vue.set(this.currentModule , "properties" ,{});
+                Vue.set(this.currentModule.properties, propname, {default:"", contraint:"string"} );
+            }else if( this.current && this.current=== this.currentNode){
+                if(!this.currentNode.properties)Vue.set(this.currentNode , "properties" ,{});
+                
+                Vue.set(this.currentNode.properties, propname, null);
+            }else if(this.current && this.current === this.currentRelation){
+                if(!this.currentRelation.relaUnit.properties)Vue.set(this.currentRelation.relaUnit , "properties" ,{});
+
+                Vue.set(this.currentRelation.relaUnit.properties, propname, null);
+            }
+            if(addPropBar.parentElement)addPropBar.parentElement.removeChild(addPropBar);
+
+        },
+        deleteProp:function(){
+            if(addPropBar.parentElement)addPropBar.parentElement.removeChild(addPropBar);
+            if(this.current && this.current ===this.currentModule){
+                Vue.delete(this.currentModule.properties, this.currentProp );
+            }else if( this.current && this.current=== this.currentNode){
+                Vue.delete(this.currentNode.properties, this.currentProp);
+            }else if(this.current && this.current === this.currentRelation){
+                Vue.delete(this.currentRelation.relaUnit.properties, this.currentProp);
+            }
+        } ,
+
+        postmodule:function(){
+            requireHandler.module.addOne({
+                labelName:  "tmp"+ new Date().getTime()
+            }).then((res)=>{
+                if(res.data){
+                    this.userModules.push(res.data);
+                    this.current = this.currentModule = res.data;
+                    this.moduleMap[this.current.labelName] = this.current;
+                }
+            }).catch(()=>{alert('添加模板失败')})
+        },
+        deletemodule:function(){
+            requireHandler.module.deleteOne(this.currentModule.id)
+                .then((res)=>{
+                    if(res.data){
+                        // console.log("dele mod",res.data);
+                        this.userModules= this.userModules.filter((ele)=>{
+                            return ele.id !== res.data.id;
+                        })
+                    }
+                })
+        },
+        patchmodule:function(){
+            requireHandler.module.patchOne(this.currentModule.id, {
+                rawMap:{
+                    properties:this.currentModule.properties,
+                    avatarUri : this.currentModule.avatarUri,
+                    labelName: this.currentModule.labelName,
+                    describe: this.currentModule.describe,
+                    node: this.currentModule.node,
+                    abstr: this.currentModule.abstr,
+                    parentIds: this.currentModule.parentIds
+                }
+            }).then(res=>{
+                if(res.data){
+
+                }else{
+                    alert("更新模板失败");
+
+                }
+            }).catch(err=>{
+                alert("更新模板失败");
+            })
         }
 
-    
+        // postnode:function
     },
 
     components:{
@@ -396,20 +505,37 @@ window.app = new Vue({
             name: "user-prop-item",
             template:`
             <div>
+                <div>
                 <label :for="'user-module-prop'+index"><slot></slot></label>
-                <input v-if=" propcontraint==='number' || typeof objprop ==='number' || objprop instanceof Number" type="number" :id="'user-module-prop'+index"  :value="objprop" @change="$emit('update:objprop',new Number($event.target.value))">
-                <div v-else-if="propcontraint==='boolean' || typeof objprop ==='boolean' || objprop instanceof Boolean" >
-                   是 <input type='radio' :id="'user-module-prop-true'+index"  :checked="objprop"  @change="$emit('update:objprop',$event.target.checked)"></input>
-                    否 <input type='radio' :id="'user-module-prop-false'+index"  :checked="!objprop" @change="$emit('update:objprop',!$event.target.checked)"></input>
                 </div>
-                <input v-else :id="'user-module-prop'+index"  :value="objprop" @change="$emit('update:objprop',$event.target.value)"></input>
-                <select v-if="propcontraint" v-model='propcontraint'>
+                <div>
+                <input v-if="selfcont==='number' || !propcontraint&& (typeof objprop ==='number' || objprop instanceof Number) ||( propcontraint && propcontraint==='number')" type="number" :id="'user-module-prop'+index"  :value="objprop" @change="$emit('update:objprop',new Number($event.target.value))">
+                <input v-else-if="selfcont==='string' || !propcontraint &&(typeof objprop ==='string' || objprop instanceof String) || ( propcontraint && propcontraint==='string')" :id="'user-module-prop'+index"  :value="objprop" @change="$emit('update:objprop',$event.target.value.trim())"></input>
+                
+                <div v-else >
+                   是<input type='radio' :id="'user-module-prop-true'+index"  :checked="objprop"  @change="$emit('update:objprop',$event.target.checked)"></input>
+                    否<input type='radio' :id="'user-module-prop-false'+index"  :checked="!objprop" @change="$emit('update:objprop',!$event.target.checked)"></input>
+                </div>
+                </div>
+                <div>
+                <select v-if="propcontraint"  v-model='propcontraint'>
                     <option>string</option>
                     <option>boolean</option>
                     <option>number</option>
                 </select>
+                <select v-else  v-model='propcontraint'>
+                    <option>string</option>
+                    <option>boolean</option>
+                    <option>number</option>
+                </select>
+                </div>
             </div>
             `,
+            data:function(){
+                return {
+                    selfcont:null
+                };
+            },
             props:['objprop' , 'index','propcontraint'],
             watch:{
                 propcontraint:function(newval){

@@ -80,8 +80,7 @@ function ticked(){
  * @param {Array} ns - init nodes list of the graph
  * @param {Array} es - init edges list of the graph
  */
-function genforceSimu(domid , ns , es){
-  
+function genforceSimu(domid , ns , es ){
     let h,w;
     svg = d3.select(domid);
     svg.attr("i-s",function(){
@@ -90,6 +89,10 @@ function genforceSimu(domid , ns , es){
         h= this.parentElement.offsetHeight;
         return "";
     });
+
+    
+
+
     let preX=null;
     let preY=null;
     let startEle = null;
@@ -177,12 +180,17 @@ function genforceSimu(domid , ns , es){
     updateSimu(nodes, edges);
 }
 
-function updateSimu(gnodes, gedges){
+function updateSimu(gnodes, gedges , rerender){
     // svg.attr('width',function(){return this.parentElement.offsetWidth;})
     //     .attr('height' , function(){return this.parentElement.offsetHeight});
     // svg.attr('viewBox' , function(){
     //     return `0 0 ${this.parentElement.offsetWidth} ${this.parentElement.offsetHeight}`;
     // });
+    if(rerender){
+        svg.selectAll('.edgegroup,.nodegroup').selectAll('*').remove();
+        console.log("rerender");
+    }
+
     simulation.nodes(gnodes);
     simulation.force('link').links(gedges);
 
@@ -236,7 +244,7 @@ function updateSimu(gnodes, gedges){
     //             .attr('r','5');
     nodeElesEnter.append('image')
                 .attr("xlink:href" , d=>{
-                    if(app.moduleMap[d.mainLabel])
+                    if(app.moduleMap[d.mainLabel]&& app.moduleMap[d.mainLabel].avatarUri)
                     return app.baseURL +"/image/"+app.moduleMap[d.mainLabel].avatarUri;
                     return "./static/moduleavatar.png";
                 })
@@ -256,6 +264,19 @@ function updateSimu(gnodes, gedges){
  * @param {object} node - the node to be insert in the graph
  */
 function insertNode(node){
+    let flag=false;
+    nodes.forEach(d=>{
+        if (d.id===node.id ){
+            flag = true;
+        }
+    })
+    if(flag){
+        console.log("reject insert node");
+        return;
+    }
+    node.id=- new Date().getTime();
+
+    
     nodes.push(node);
     updateSimu(nodes,edges);
 }
@@ -291,7 +312,7 @@ function insertEdge(edge){
         console.log("reject insert edge");
         return;
     }
-    edge.relaUnit.id=-2;
+    edge.relaUnit.id=- new Date().getTime();
     edges.push(edge);
 
     updateSimu(nodes,edges);

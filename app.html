@@ -11,16 +11,28 @@
         @import url("./static/css/ldrawer.css");
         @import url("./static/css/graph.css");
         @import url("./static/css/rdrawer.css");
-        #add-file-bar>input{
+        #add-file-bar>input,#add-folder-bar>input{
             background-color:rgb(0, 0, 0);
             color:white;
             border:1px solid rgb(5, 181, 204);
             outline: none;
         }
-        #add-file-bar:hover>input{
+        #add-file-bar:hover>input,#add-folder-bar:hover>input{
             border:1px solid rgb(3, 226, 255);
-
         }
+
+
+        #add-prop-bar{
+            margin:7px 10%;
+        }
+        #add-prop-bar>input{
+            border:1px solid  rgb(1, 174, 255);
+            width:100%;
+        }
+        /* #add-prop-bar:hover>input{
+            background-color: rgb(1, 174, 255);
+
+        } */
     </style>
 </head>
 <body >
@@ -154,8 +166,21 @@
                     <file-tree-item v-for="file in getFileChildren(null)" :fileobj="file"></file-tree-item>
                 </div>
                 <div class="module"  @click="current= null" v-if="ldrawerContent==='module'">
-                    <div class="control-bar"></div>
-                    <module-item draggable="true"  v-for="module in userModules" :moduleobj="module"></module-item>
+                    <div class="control-bar">
+                        <div id="add-module" @click="postmodule()">
+                            <svg viewBox="0 0 1024 1024" height="20" width="20">
+                                <path class="pluspath" d="M858.88 448H576V167.68a64 64 0 0 0-128 0V448H169.6a64 64 0 0 0 0 128H448v280.32a64 64 0 0 0 128 0V576h280.32a64 64 0 0 0 0-128z" ></path>
+                            </svg>
+                        </div>
+                        <div id="remove-module" @click="deletemodule()">
+                            <svg viewBox="0 0 1024 1024" height="20" width="20">
+                                <path class='minuspath' d="M972.8 494.933333c0 22.755556-17.066667 45.511111-45.511111 45.511111H96.711111c-22.755556 0-45.511111-17.066667-45.511111-45.511111s17.066667-45.511111 45.511111-45.511111h836.266667c22.755556 0 39.822222 17.066667 39.822222 45.511111z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <div>
+                        <module-item draggable="true"  v-for="module in userModules" :moduleobj="module"></module-item>
+                    </div>  
                 </div>
                 <div class="search" v-if="ldrawerContent==='search'">
 a
@@ -166,8 +191,8 @@ a
             <div class="graph-canvas">
                 <svg @dragover="canvasdragover($event)" @drop="canvasdrop($event)" width="2000" height="2000" viewBox="0 0 2000 2000" id="main">
                     <defs>
-                        <marker id="arrowhead" viewBox="0 -5  10 10" refX="35" refY='0' orient="auto" markerWidth="10" markerHeight="10" xoverflow="visible">
-                            <path d="M 0 -5 L 10 0 L 0 5" fill="#999" stroke="none"></path>
+                        <marker id="arrowhead" viewBox="0 -5  10 10" refX="35" refY='0' orient="auto" markerWidth="5" markerHeight="5" xoverflow="visible">
+                            <path d="M 0 -5 L 10 0 L 0 5" fill="rgb(0, 82, 121)" stroke="none"></path>
                         </marker>
                         <clipPath id="circlepath" clipPathUnits="objectBoundingBox">
                             <circle r=".5" cx=".5" cy=".5"></circle>
@@ -187,11 +212,11 @@ a
                                 
                             </svg>
                             <!-- <img :src="current.avatarUri?baseURL+'/image/'+current.avatarUri:'./static/moduleavatar.png'" > -->
-                            <input @change="uploadimage($event)" class="upload-file" type="file" name="image" >
+                            <input @change="uploadimage($event)" class="upload-file" type="file" accept="image/png, image/jpeg, image/gif, image/jpg" name="image" >
                    
                         </div>
                         <div class="title-area">
-                            <input class='textinput' type="text" v-model="currentModule.labelName">
+                            <input class='textinput' type="text" v-model.trim="currentModule.labelName">
                         </div>
                     </div>
                     <div class="type-props">
@@ -211,23 +236,23 @@ a
                         </div>    
                     </div>
                     <div class="user-prop-controller">
-                        <div id="add-module-prop">
+                        <div id="add-module-prop" @click="showPropBar()">
                             <svg viewBox="0 0 1024 1024" height="20" width="20">
                                 <path class="pluspath" d="M858.88 448H576V167.68a64 64 0 0 0-128 0V448H169.6a64 64 0 0 0 0 128H448v280.32a64 64 0 0 0 128 0V576h280.32a64 64 0 0 0 0-128z" ></path>
                             </svg>
                         </div>
-                        <div id="remove-module-prop">
+                        <div id="remove-module-prop" @click="deleteProp()">
                             <svg viewBox="0 0 1024 1024" height="20" width="20">
                                 <path class='minuspath' d="M972.8 494.933333c0 22.755556-17.066667 45.511111-45.511111 45.511111H96.711111c-22.755556 0-45.511111-17.066667-45.511111-45.511111s17.066667-45.511111 45.511111-45.511111h836.266667c22.755556 0 39.822222 17.066667 39.822222 45.511111z"></path>
                             </svg>
                         </div>
                     </div>
                     <div class="user-props">
-                        <user-prop-item class="user-prop-item" v-for="(prop,name,index) in currentModule.properties" :index="index" :objprop.sync="prop.default" :propcontraint="prop.contraint"><div class="user-prop-name" @click="clickProp(name)">{{name}}</div></user-prop-item>
+                        <user-prop-item class="user-prop-item" v-for="(prop,name,index) in currentModule.properties" :index="index" :objprop.sync="prop.default" :propcontraint.sync="prop.contraint"><div class="user-prop-name" @click="clickProp(name)">{{name}}</div></user-prop-item>
                     </div>
                     <div >
-                        <div id="rd-module-btn">
-                            {{currentModule.id?'修改':'添加'}}
+                        <div id="rd-module-btn" @click="patchmodule()">
+                            {{currentModule.id?'修改':'修改'}}
                         </div>
                     </div>
                 </div>
@@ -251,12 +276,12 @@ a
                         </div>
                     </div>
                     <div class="user-prop-controller">
-                        <div id="add-node-prop">
+                        <div id="add-node-prop" @click="showPropBar()">
                             <svg viewBox="0 0 1024 1024" height="20" width="20">
                                 <path class="pluspath" d="M858.88 448H576V167.68a64 64 0 0 0-128 0V448H169.6a64 64 0 0 0 0 128H448v280.32a64 64 0 0 0 128 0V576h280.32a64 64 0 0 0 0-128z" ></path>
                             </svg>
                         </div>
-                        <div id="remove-node-prop">
+                        <div id="remove-node-prop" @click="deleteProp()">
                             <svg viewBox="0 0 1024 1024" height="20" width="20">
                                 <path class='minuspath' d="M972.8 494.933333c0 22.755556-17.066667 45.511111-45.511111 45.511111H96.711111c-22.755556 0-45.511111-17.066667-45.511111-45.511111s17.066667-45.511111 45.511111-45.511111h836.266667c22.755556 0 39.822222 17.066667 39.822222 45.511111z"></path>
                             </svg>
@@ -279,12 +304,12 @@ a
                         </div>
                     </div>
                     <div class="user-prop-controller">
-                        <div id="add-rela-prop">
+                        <div id="add-rela-prop" @click = "showPropBar()">
                             <svg viewBox="0 0 1024 1024" height="20" width="20">
                                 <path class="pluspath" d="M858.88 448H576V167.68a64 64 0 0 0-128 0V448H169.6a64 64 0 0 0 0 128H448v280.32a64 64 0 0 0 128 0V576h280.32a64 64 0 0 0 0-128z" ></path>
                             </svg>
                         </div>
-                        <div id="remove-rela-prop">
+                        <div id="remove-rela-prop" @click="deleteProp()">
                             <svg viewBox="0 0 1024 1024" height="20" width="20">
                                 <path class='minuspath' d="M972.8 494.933333c0 22.755556-17.066667 45.511111-45.511111 45.511111H96.711111c-22.755556 0-45.511111-17.066667-45.511111-45.511111s17.066667-45.511111 45.511111-45.511111h836.266667c22.755556 0 39.822222 17.066667 39.822222 45.511111z"></path>
                             </svg>
