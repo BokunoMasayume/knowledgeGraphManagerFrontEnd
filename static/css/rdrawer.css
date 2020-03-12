@@ -197,7 +197,21 @@
     width:40%;
     cursor: pointer;
     overflow: hidden;
+    text-align: center;
     margin:5px;
+}
+.rd-node .label-pool>div>div:hover{
+    overflow-x: scroll;
+    /* width:auto; */
+}
+.rd-node .label-pool>div>div::-webkit-scrollbar{
+    height: 5px;
+}
+/* .rd-node .label-pool>div>div::-webkit-scrollbar-button{
+    background-color: aqua;
+} */
+.rd-node .label-pool>div>div::-webkit-scrollbar-thumb{
+    background-color: rgb(255, 0, 200);
 }
 .rd-node #rd-node-btn{
     min-width: 100px;

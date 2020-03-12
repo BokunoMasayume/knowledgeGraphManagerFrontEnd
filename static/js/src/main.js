@@ -1,10 +1,43 @@
-// import {requestHandler} from './request';
 import {requireFactory} from './request';
 import Vue from 'vue/dist/vue.esm';
 import contextMenuHandler from "./contextMenu";
 import forcedgraph from './forcedgraph';
 
-// forcedgraph.genforceSimu('#main' [],[]),
+window.addFileBar = document.createElement('div')
+addFileBar.setAttribute('id','add-file-bar');
+addFileBar.classList.add('file-tree-item');
+addFileBar.addEventListener('click',function(e){
+    e.stopPropagation();
+})
+let input = document.createElement('input')
+input.setAttribute('type' , 'text');
+input.addEventListener('change' , function(e){
+    app.appendFile(e.target.value);
+})
+addFileBar.appendChild(input);
+
+
+window.addFolderBar = document.createElement('div')
+addFolderBar.setAttribute('id','add-folder-bar');
+addFolderBar.classList.add('file-tree-item');
+addFolderBar.addEventListener('click',function(e){
+    e.stopPropagation();
+})
+let input2 = document.createElement('input')
+input2.setAttribute('type' , 'text');
+input2.addEventListener('change',function(e){
+    app.appendFolder(e.target.value);
+})
+addFolderBar.appendChild(input2);
+
+window.addPropBar = document.createElement('div')
+addPropBar.setAttribute('id','add-prop-bar');
+let input3 = document.createElement('input');
+input3.setAttribute('type' , 'text');
+input3.addEventListener('change',function(e){
+    app.appendProp(e.target.value);
+})
+addPropBar.appendChild(input3);
 
 window.app = new Vue({
     el: "#app",
@@ -103,7 +136,8 @@ window.app = new Vue({
         return {
             clickFile: this.clickFile,
             clickModule: this.clickModule,
-            dragmodule: this.dragmodule
+            dragmodule: this.dragmodule,
+            appendFile:this.appendFile
         }
     },
     
@@ -252,6 +286,106 @@ window.app = new Vue({
 
         appendNodeLabel:function(e){
             this.currentNode.labels.push(e.target.value);
+        },
+
+        /**
+         * add file. if current is folder the file's parent the folder,
+         * if current is file the files have same parent
+         * if current is null , parent is null
+         * @param {string} filename - filename of the added file
+         */
+        appendFile:function(filename){
+            console.log('add file' , this.current, filename , addFileBar.parentElement.getAttribute('my-id'));
+            requireHandler.file.addOne({
+                fileName: filename,
+                folder:false,
+                // parentId: app.current===null?null:(app.current===app.currentFile?app.currentFile.parentId:app.currentFolder.id)
+                parentId: addFileBar.parentElement.parentElement.getAttribute('my-id')?addFileBar.parentElement.parentElement.getAttribute('my-id'):null
+            }).then((response)=>{
+                if(response.data){
+                    this.userFiles.push(response.data);
+                }
+            }).finally(()=>{
+                addFileBar.parentElement.removeChild(addFileBar);
+
+            })
+        },
+        showFileBar:function(){
+            if(addFileBar.parentElement)addFileBar.parentElement.removeChild(addFileBar);
+            if(addFolderBar.parentElement)addFolderBar.parentElement.removeChild(addFolderBar);
+            
+            if(this.current===null){
+                document.querySelector('.filetree').appendChild(addFileBar);
+            }else if(this.current=== this.currentFile){
+                //have same parent
+                this.currentFileEle.parentElement.parentElement.appendChild(addFileBar);
+            }else{
+                this.currentFileEle.parentElement.querySelectorAll('div')[1].appendChild(addFileBar);
+            }
+        },
+
+        /**
+         * add folder
+         * @param {string} foldername 
+         */
+        appendFolder:function(foldername){
+            requireHandler.file.addOne({
+                fileName: foldername,
+                folder:true,
+                // parentId: app.current===null?null:(app.current===app.currentFile?app.currentFile.parentId:app.currentFolder.id)
+                parentId: addFolderBar.parentElement.parentElement.getAttribute('my-id')?addFolderBar.parentElement.parentElement.getAttribute('my-id'):null
+            }).then((response)=>{
+                if(response.data){
+                    this.userFiles.push(response.data);
+                }
+            }).finally(()=>{
+                addFolderBar.parentElement.removeChild(addFolderBar);
+
+            })
+        },
+        showFolderBar:function(){
+            if(addFileBar.parentElement)addFileBar.parentElement.removeChild(addFileBar);
+            if(addFolderBar.parentElement)addFolderBar.parentElement.removeChild(addFolderBar);
+            
+            if(this.current===null){
+                document.querySelector('.filetree').appendChild(addFolderBar);
+            }else if(this.current=== this.currentFile){
+                //have same parent
+                this.currentFileEle.parentElement.parentElement.appendChild(addFolderBar);
+            }else{
+                this.currentFileEle.parentElement.querySelectorAll('div')[1].appendChild(addFolderBar);
+            }
+        },
+        deleteFile:function(){
+            if(this.current && (this.current===this.currentFile || this.current=== this.currentFolder)){
+                requireHandler.file.deleteOne(this.current.id)
+                .then((response)=>{
+                    if(response.data && response.data.id){
+                        this.userFiles = this.userFiles.filter(f=>f.id!==response.data.id);
+                    }
+                })
+                // .finally(()=>{
+                //     addFolderBar.parentElement.removeChild(addFolderBar);
+
+                // })
+            }
+        },
+        requestFiles:function(){
+            document.querySelector("#refreshpath").classList.add('refreshing');
+            requireHandler.file.getAll().then(response=>{
+                if(response.data){
+                    this.userFiles = response.data;
+                }
+            }).finally(()=>{
+                document.querySelector("#refreshpath").classList.remove('refreshing');
+
+            });
+        },
+
+        showPropBar:function(){
+            if(addPropBar.parentElement)addPropBar.parentElement.removeChild(addPropBar);
+
+            if(this.current && )
         }
 
     
@@ -314,7 +448,7 @@ window.app = new Vue({
         "file-tree-item":{
             name:"file-tree-item",
             template:`
-                <div :class="{ 'focus':isCurrent(fileobj.id) , 'file-tree-item':true, 'file-tree-folder':fileobj.folder, 'file-tree-file':!fileobj.folder}">
+                <div :my-id="fileobj.id" :class="{ 'focus':isCurrent(fileobj.id) , 'file-tree-item':true, 'file-tree-folder':fileobj.folder, 'file-tree-file':!fileobj.folder}">
                     <div @click.stop="clickFile(fileobj,$event);foldChildren = !foldChildren" class="file-tree-node">
                         <svg viewBox="-100 -100 1024 1024" width="20" height="20">
 <path v-if='!fileobj.folder' class='fileicon' d="M733.6228025 357.50476098L604.7119751 228.65325904V357.50476098h128.9108274zM542.89904809 419.30285644V203.00952125h-247.19238329c-8.68634009 0-16.01806641 2.98608422-21.96551513 8.96319604-5.96228028 5.97216773-8.92858886 13.28411842-8.92858888 21.93585205v556.18286133c0 8.65173364 2.96630859 16.06750512 8.92858888 21.94079613 5.94250464 5.97216773 13.27917504 8.95825195 21.96057176 8.95825195h432.59655714c8.71105981 0 16.02795386-2.98608422 21.98034668-8.96319604 5.92272973-5.86834693 8.90881324-13.28411842 8.90881396-21.93585204v-370.78857422H542.89904809zM295.72149634 141.21142578h308.99047876L820.99047875 357.50476098v432.58666968c0 25.54486108-9.04724122 47.48071313-27.14172363 65.50598122-18.10931396 18.1290896-39.9462893 27.19116234-65.55541992 27.19116234h-432.5866704c-25.56958008 0-47.42633033-9.06207276-65.5356443-27.19116234C212.06170654 837.57214379 203.00952125 815.63629174 203.00952125 790.09143067V233.90856933C203.00952125 208.36370826 212.06170654 186.53167701 230.1710205 168.40258813S270.13708472 141.21142578 295.7066648 141.21142578h0.01977563z" ></path>
