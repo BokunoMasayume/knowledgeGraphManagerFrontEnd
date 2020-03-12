@@ -15,6 +15,7 @@
     stroke: rgb(9, 109, 190);
     /* stroke-dasharray: 20% 40% 20%; */
     stroke-width: 2px;
+    fill:none;
 }
 
 .edge .edgetext{
@@ -28,7 +29,8 @@
     /* stroke:blue; */
 }
 .edge:hover .edgeline{
-    stroke:rgb(255, 81, 0,0);
+    stroke:rgba(255, 81, 0, 0.226);
+    fill:none;
 }
 .edge:hover .edgetext{
     fill:rgb(255, 81, 0);

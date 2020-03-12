@@ -487,7 +487,7 @@ window.app = new Vue({
                 }
             }).then(res=>{
                 if(res.data){
-
+                    this.moduleMap[res.data.labelName] = res.data;
                 }else{
                     alert("更新模板失败");
 
@@ -495,9 +495,204 @@ window.app = new Vue({
             }).catch(err=>{
                 alert("更新模板失败");
             })
+        },
+
+        postnode:function(){
+            if(this.currentNode.id>=0 || !this.currentFile)return;
+            let node  = this.currentNode;
+            requireHandler.graph.node.addOne(this.currentFile.id , {
+                labels: this.currentNode.labels,
+                mainLabel: this.currentNode.mainLabel,
+                properties: this.currentNode.properties
+
+            }).then((response)=>{
+                if(response.data){
+                    node.id = response.data.id;
+                }
+                else{
+                    alert("添加节点失败");
+                }
+            }).catch(err=>{
+                alert("添加节点失败");
+            });
+        },
+
+        patchnode:function(){
+            if(this.currentNode.id<0 || !this.currentFile)return;
+
+            requireHandler.graph.node.patchOne(this.currentFile.id,this.currentNode.id , {
+                labels: this.currentNode.labels,
+                mainLabel: this.currentNode.mainLabel,
+                properties: this.currentNode.properties
+
+            }).then((response)=>{
+                if(response.data){
+                    // node.id = response.data.id;
+                }
+                else{
+                    alert("更新节点失败");
+                }
+            }).catch(err=>{
+                alert("更新节点失败");
+            });
+        },
+
+        deletenode:function(){
+            if(this.currentNode.id<0){
+                this.graph.nodes.splice(this.currentNode.index, 1);
+                this.graph.relations = this.graph.relations.filter((ele)=>{
+                    return (ele.source.id!==this.currentNode.id && ele.target.id!==this.currentNode.id);
+                })
+                return;
+            }
+            if(  !this.currentFile)return;
+            let node = this.currentNode;
+            requireHandler.graph.node.deleteOne(this.currentFile.id, this.currentNode.id)
+            .then(response=>{
+                if(response.data){
+                    this.graph.nodes.splice(this.currentNode.index, 1);
+                    this.graph.relations = this.graph.relations.filter((ele)=>{
+                        return (ele.source.id!==this.currentNode.id && ele.target.id!==this.currentNode.id);
+                    })
+                    //delete attached relations , so refresh
+                    // this.clickFile(this.currentFile, {currentTarget:this.currentFileEle});
+
+                }else{
+                    alert("删除节点失败")
+                }
+            }).catch(err=>{
+                alert("删除节点失败")
+            })
+        },
+        postrela: function(){
+            if(this.currentRelation.relaUnit.id>=0 || !this.currentFile)return;
+            if(this.currentRelation.source.id<0 || this.currentRelation.target.id<0){
+                alert("请先添加相关节点")
+                return;
+            }
+
+            let rela = this.currentRelation;
+            requireHandler.graph.rela.addOne(this.currentFile.id , {
+                source: rela.source.id,
+                target: rela.target.id,
+                relaUnit: rela.relaUnit
+            }).then((response)=>{
+                if(response.data){
+                    rela.relaUnit.id = response.data.id;
+                }
+            })
+        },
+
+        patchrela:function(){
+            if(this.currentRelation.relaUnit.id<0 || !this.currentFile)return;
+            let rela = this.currentRelation;
+            requireHandler.graph.rela.patchOne(this.currentFile.id , this.currentRelation.relaUnit.id, {
+                // source: rela.source.id,
+                // target: rela.target.id,
+                // relaUnit: rela.relaUnit
+                relationName: rela.relaUnit.relationName,
+                properties: rela.relaUnit.properties
+            })
+        },
+
+        deleterela:function(){
+            if(this.currentRelation.relaUnit.id<0){
+                this.graph.relations.splice(this.currentRelation.index , 1);
+                return;
+
+            }
+            if( !this.currentFile)return;
+            let rela = this.currentRelation;
+            requireHandler.graph.rela.deleteOne(this.currentFile.id, this.currentRelation.relaUnit.id )
+            .then(response=>{
+                if(response.data){
+                    this.graph.relations.splice(rela.index , 1);
+                }
+            })
+        },
+
+        addOrUpdateBtn: function(){
+            if(this.current === this.currentNode){
+                //for node
+                if(this.current.id<0){
+                    this.postnode();
+                }else{
+                    this.patchnode();
+                }
+            }
+            if(this.current=== this.currentRelation){
+                //for relationship
+                if(this.current.relaUnit.id<0){
+                    this.postrela();
+                }else{
+                    this.patchrela();
+                }
+            }
+        },
+
+        saveAll:function(){
+            // console.log("in save all" , e.key)
+
+            // if(e.key!='s')return;
+            //node
+            let nodeprolis = [];
+            for(let i=0 ;i<this.graph.nodes.length;i++){
+                let node = this.graph.nodes[i];
+                if(node.id<0){
+                    nodeprolis.push(  requireHandler.graph.node.addOne(this.currentFile.id , {
+                        labels: node.labels,
+                        mainLabel: node.mainLabel,
+                        properties: node.properties
+        
+                    })  );
+                }else{
+
+                    nodeprolis.push( requireHandler.graph.node.patchOne(this.currentFile.id,this.currentNode.id , {
+                        labels: node.labels,
+                        mainLabel: node.mainLabel,
+                        properties: node.properties
+        
+                    })  );
+                }
+            }
+            //rela
+            Promise.all(nodeprolis).then((responses)=>{
+                for(let i=0 ;i<responses.length;i++){
+                    this.graph.nodes[i].id = responses[i].data.id;
+                }
+
+                let relaprolis = [];
+
+                for(let i=0; i<this.graph.relations.length;i++){
+                    let rela = this.graph.relations[i];
+                    if(rela.relaUnit.id<0){
+                        if(rela.source.id<0 || rela.target.id<0){
+                            alert("请先添加相关节点")
+                            return;
+                        }
+                        relaprolis.push( requireHandler.graph.rela.addOne(this.currentFile.id , {
+                            source: rela.source.id,
+                            target: rela.target.id,
+                            relaUnit: rela.relaUnit
+                        }) );
+                    }else{
+                        relaprolis.push( requireHandler.graph.rela.patchOne(this.currentFile.id , this.currentRelation.relaUnit.id, {
+                            // source: rela.source.id,
+                            // target: rela.target.id,
+                            // relaUnit: rela.relaUnit
+                            relationName: rela.relaUnit.relationName,
+                            properties: rela.relaUnit.properties
+                        })  );
+                    }
+                }
+
+                return Promise.all(relaprolis);
+
+            }).then(()=>{
+                this.clickFile(this.currentFile, {currentTarget:this.currentFileEle});
+            })
         }
 
-        // postnode:function
     },
 
     components:{
@@ -659,8 +854,13 @@ window.app = new Vue({
     }
 });
 
-//@todo patch post delete methods relate to btn
-//      drag drop create graph
-//      props show and enable to change
+
+
+document.body.addEventListener('keyup' , function(e){
+    console.log("keyup",e)
+    if(e.ctrlKey && e.shiftKey && e.code=='KeyS'){
+        app.saveAll();
+    }
+})
 
 

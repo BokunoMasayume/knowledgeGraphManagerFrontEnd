@@ -37,7 +37,7 @@
 </head>
 <body >
     
-    <div id ="app">
+    <div id ="app" >
         
         <div id="signin" v-show="visibleHandler.signinbox">
             <div>
@@ -163,7 +163,9 @@
                             </svg>
                         </div>
                     </div>
-                    <file-tree-item v-for="file in getFileChildren(null)" :fileobj="file"></file-tree-item>
+                    <div>
+                        <file-tree-item v-for="file in getFileChildren(null)" :fileobj="file"></file-tree-item>
+                    </div>
                 </div>
                 <div class="module"  @click="current= null" v-if="ldrawerContent==='module'">
                     <div class="control-bar">
@@ -187,8 +189,8 @@ a
                 </div>
             </div>
             </transition>
-
-            <div class="graph-canvas">
+            <!-- TODO @keyup.alt="saveAll($event)" on .graph-canvas not working -->
+            <div class="graph-canvas" >
                 <svg @dragover="canvasdragover($event)" @drop="canvasdrop($event)" width="2000" height="2000" viewBox="0 0 2000 2000" id="main">
                     <defs>
                         <marker id="arrowhead" viewBox="0 -5  10 10" refX="35" refY='0' orient="auto" markerWidth="5" markerHeight="5" xoverflow="visible">
@@ -291,7 +293,7 @@ a
                         <user-prop-item class="user-prop-item" v-for="(prop,name,index) in currentNode.properties" :index="index" :objprop.sync="currentNode.properties[name]" ><div class="user-prop-name" @click="clickProp(name)">{{name}}</div></user-prop-item>
                     </div>
                     <div >
-                        <div id="rd-node-btn">
+                        <div id="rd-node-btn" @click="addOrUpdateBtn()">
                             {{currentNode.id>=0?'修改':'添加'}}
                         </div>
                     </div>
@@ -319,7 +321,7 @@ a
                         <user-prop-item class="user-prop-item" v-for="(prop,name,index) in currentRelation.relaUnit.properties" :index="index" :objprop.sync="currentRelation.relaUnit.properties[name]" ><div class="user-prop-name" @click="clickProp(name)">{{name}}</div></user-prop-item>
                     </div>
                     <div >
-                        <div id="rd-rela-btn">
+                        <div id="rd-rela-btn"  @click="addOrUpdateBtn()">
                             {{currentRelation.relaUnit.id>=0?'修改':'添加'}}
                         </div>
                     </div>

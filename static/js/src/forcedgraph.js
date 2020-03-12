@@ -2,6 +2,7 @@ import * as d3 from 'd3';
 
 import {throttle} from './throttledebance'
 
+import contextMenuHandler from "./contextMenu";
 
 
 
@@ -44,9 +45,11 @@ function dragged(d){
  */
 function ended(d){
     simulation.alphaTarget(0);
-
-    d.fx = null;
-    d.fy = null;
+    if(!event.ctrlKey){
+        d.fx = null;
+        d.fy = null;
+    }
+    
 }
 
 let svg , simulation ;
@@ -59,7 +62,32 @@ function ticked(){
     //                 .attr('y2',(d)=>d.target.y);
     svg.selectAll('.edge').select('path')
             .attr('d',function(d){ 
-                return `M${d.source.x} ${d.source.y} L${d.target.x} ${d.target.y}` ;
+                let symbol = d.multipleLineIndex%2==0?1:-1;
+
+                if(d.source=== d.target){
+                    let midx = d.source.x+20;
+                    let midy = d.source.y+20;
+                    let midx2 = d.source.x+20;
+                    let midy2 = d.source.y-20;
+                    let vx = d.source.vx;
+                    let vy = d.source.vy;
+                    let dis = Math.sqrt(vx*vx+vy*vy);
+
+                    return `M${d.source.x} ${d.source.y} C  ${midx-d.multipleLineIndex*symbol*40*vy/dis} ${midy+d.multipleLineIndex*symbol*40*vx/dis},  ${midx2-d.multipleLineIndex*symbol*40*vy/dis} ${midy2+d.multipleLineIndex*symbol*40*vx/dis},  ${d.target.x} ${d.target.y}` ;
+                    // return `M${d.source.x} ${d.source.y} C  ${midx-d.multipleLineIndex*symbol*40*vy/dis} ${midy+d.multipleLineIndex*symbol*40*vx/dis},  ${midx2-d.multipleLineIndex*symbol*40*vy/dis} ${midy2+d.multipleLineIndex*symbol*40*vx/dis},  ${d.target.x} ${d.target.y}` ;
+                }
+                // return `M${d.source.x} ${d.source.y} L${d.target.x} ${d.target.y}` ;
+                let midx = (d.source.x+d.target.x)/2;
+                let midy = (d.source.y + d.target.y)/2;
+
+                let dx = (d.target.x - d.source.x);
+                let dy = (d.target.y - d.source.y);
+
+                let dis = Math.sqrt(dx*dx+dy*dy);
+                // console.log(midx+d.multipleLineIndex*symbol*100*dx/dis);
+
+                // return `M${d.source.x} ${d.source.y} Q ${midx+d.multipleLineIndex*symbol*100*dx/dis} ${midy-d.multipleLineIndex*symbol*100*dy/dis} ,${d.target.x} ${d.target.y}` ;
+                return `M${d.source.x} ${d.source.y} Q  ${midx-d.multipleLineIndex*symbol*40*dy/dis} ${midy+d.multipleLineIndex*symbol*40*dx/dis},${d.target.x} ${d.target.y}` ;
             });
     
 
@@ -90,6 +118,7 @@ function genforceSimu(domid , ns , es ){
         return "";
     });
 
+    svg.selectAll('.edgegroup,.nodegroup').selectAll('*').remove();
     
 
 
@@ -156,7 +185,7 @@ function genforceSimu(domid , ns , es ){
             //     endEle = null;
             // }
 
-        } , 10);
+        } , 50);
         // TODO mousemove always called twice !! I tried throttle function dont work, also as stopPropagation, I dont know why ,
         // anyway fix it by add check in insertEdge func
         document.getElementById(domid.slice(1)).addEventListener('mousemove',function(e){
@@ -171,7 +200,7 @@ function genforceSimu(domid , ns , es ){
     edges = es;
     simulation = d3.forceSimulation(nodes)
                     .force("link" , d3.forceLink(edges).id((d)=>{return d.id;}).iterations(10).distance(150))
-                    .force("charge", d3.forceManyBody().strength(-100))
+                    .force("charge", d3.forceManyBody().strength(-60))
                     .force("center",d3.forceCenter().x(w/2).y(h/2))
                     // .force("center",d3.forceCenter().x(svg.attr('width')/2).y(svg.attr('height')/2))
                     .on('tick',ticked);
@@ -194,6 +223,33 @@ function updateSimu(gnodes, gedges , rerender){
     simulation.nodes(gnodes);
     simulation.force('link').links(gedges);
 
+    /**
+     * add for multiple lines between same nodes
+     */
+    for(let i=0; i<gedges.length ;i++){
+        delete gedges[i].multipleLineStage;
+    }
+
+    for(let i=0 ;i <gedges.length ; i++){
+        if(gedges[i].multipleLineStage)continue;
+        gedges[i].multipleLineStage = {count:0};
+        gedges[i].multipleLineIndex = ++gedges[i].multipleLineStage.count;
+        for(let j=i+1 ;j<gedges.length ;j++){
+            console.log(i, "-and-",j);
+
+            if( (gedges[i].source.id===gedges[j].source.id && gedges[i].target.id===gedges[j].target.id) 
+                || (gedges[i].source.id===gedges[j].target.id && gedges[i].target.id===gedges[j].source.id) )
+            {
+                console.log(i, "and",j);
+                gedges[j].multipleLineStage = gedges[i].multipleLineStage;
+                gedges[j].multipleLineIndex = ++gedges[i].multipleLineStage.count;
+
+            }
+        }
+    }
+
+     /**     end here */
+
     let edgeEles = svg.select('.edgegroup').selectAll('.edge')
                       .data(gedges);
 
@@ -208,6 +264,10 @@ function updateSimu(gnodes, gedges , rerender){
                 .attr('class','edge')
                 .on('click', function(d){
                     app.clickRela(d);
+                    if(event.ctrlKey){
+                        contextMenuHandler.setCurrentObj(d);
+                        contextMenuHandler.menuhandler('edgemenu',event);
+                    }
                    
                 })
     edgeElesEnter.append('path')
@@ -237,8 +297,27 @@ function updateSimu(gnodes, gedges , rerender){
                         .on('end',ended))
                 .on("click",function(d){
                     app.clickNode(d);
-                    console.log("force click",d)
-                });
+                    // console.log("force click",d)
+                    // console.log("event node click ",event);
+                    if(event.ctrlKey){
+                        contextMenuHandler.setCurrentObj(d);
+                        contextMenuHandler.menuhandler('nodemenu',event);
+                    }
+                    
+                })
+                // .on("mouseup",function(d){
+                //     if(event.ctrlKey){
+                //         d.fx = d.x;
+                //         d.fy = d.y;
+                //     }
+                // })
+                // .on("contextmenu", function(d){
+                //     event.preventDefault();
+                //     event.stopPropagation();
+                //     contextMenuHandler.setCurrentObj(d);
+                //     contextMenuHandler.menuhandler('nodemenu',event);
+                    
+                // });
 
     // nodeElesEnter.append('circle')
     //             .attr('r','5');

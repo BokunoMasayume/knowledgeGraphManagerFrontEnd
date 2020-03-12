@@ -1,17 +1,21 @@
 .ldrawer{
-    border-right:1px solid rgb(3, 43, 40);
-
+    border-right:1px solid rgb(1, 112, 107);
+    padding-bottom: 20px;
+    background-color: black;
 }
 .ldrawer>div{
     height: 100%;
     min-width: 230px;
+    background-color: black;
+
 }
 
 .ldrawer>.module{
-    background-color: aqua;
+    background-color: rgb(0, 0, 0);
+
 }
 .ldrawer>.search{
-    background-color: chartreuse;
+    background-color: rgb(0, 0, 0);
 }
 @keyframes drawin{
     0%{
@@ -72,6 +76,24 @@
     cursor: pointer;
 }
 
+.ldrawer>.filetree>div:nth-child(0n+2){
+    padding-top: 5%;
+
+    max-height: 70%;
+    /* height:700px; */
+
+    overflow-y: scroll;
+    overflow-x: visible;
+
+
+}
+.ldrawer>.filetree>div::-webkit-scrollbar{
+    width: 5px;
+}
+.ldrawer>.filetree>div::-webkit-scrollbar-thumb{
+    background-color: rgb(4, 148, 173);
+}
+
 
 /**csstag  模板样式 */
 .ldrawer>.module{
@@ -82,7 +104,9 @@
     display: flex;
     justify-content: flex-end;
     padding: 3%;
-    border-bottom: 1px solid rgb(3, 43, 40);
+    border-bottom: 1px solid rgb(4, 56, 53);
+
+    max-height: 30%;
 }
 .ldrawer>.module>div:nth-child(0n+1)>div{
     margin-right: 5%;
@@ -93,10 +117,21 @@
     justify-content: flex-start;
     align-content: flex-start;
 
-    height: 100%;
+    max-height: 70%;
+    /* height:700px; */
 
     background-color: rgba(0, 0, 0,1);
+    overflow-y: scroll;
+    overflow-x: visible;
 
+
+}
+.ldrawer>.module>div::-webkit-scrollbar{
+    width: 5px;
+    height: 1px;
+}
+.ldrawer>.module>div::-webkit-scrollbar-thumb{
+    background-color: rgb(4, 148, 173);
 }
 .ldrawer>.module image{
     clip-path: circle(50%);
@@ -109,6 +144,7 @@
     padding:5px;
     margin:3%;
     max-width: 50px;
+    min-width:20%;
     white-space: nowrap;
 
     overflow: hidden;
