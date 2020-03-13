@@ -647,7 +647,7 @@ window.app = new Vue({
                     })  );
                 }else{
 
-                    nodeprolis.push( requireHandler.graph.node.patchOne(this.currentFile.id,this.currentNode.id , {
+                    nodeprolis.push( requireHandler.graph.node.patchOne(this.currentFile.id,node.id , {
                         labels: node.labels,
                         mainLabel: node.mainLabel,
                         properties: node.properties
@@ -659,6 +659,7 @@ window.app = new Vue({
             Promise.all(nodeprolis).then((responses)=>{
                 for(let i=0 ;i<responses.length;i++){
                     this.graph.nodes[i].id = responses[i].data.id;
+                    console.log("after node saved ",responses[i].data)
                 }
 
                 let relaprolis = [];
@@ -676,7 +677,7 @@ window.app = new Vue({
                             relaUnit: rela.relaUnit
                         }) );
                     }else{
-                        relaprolis.push( requireHandler.graph.rela.patchOne(this.currentFile.id , this.currentRelation.relaUnit.id, {
+                        relaprolis.push( requireHandler.graph.rela.patchOne(this.currentFile.id , rela.relaUnit.id, {
                             // source: rela.source.id,
                             // target: rela.target.id,
                             // relaUnit: rela.relaUnit
@@ -690,7 +691,9 @@ window.app = new Vue({
 
             }).then(()=>{
                 this.clickFile(this.currentFile, {currentTarget:this.currentFileEle});
-            })
+            }).catch(()=>{
+                alert("保存失败")
+            });
         }
 
     },
