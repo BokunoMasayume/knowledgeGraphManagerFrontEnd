@@ -255,6 +255,19 @@ window.app = new Vue({
                 alert("点文件不好使的");
             }) 
         },
+        scrollmodulegrouptag:function(e){
+            console.log("scroll",e);
+            let i;
+            for(i=0 ;i<e.path.length;i++){
+                if(e.path[i].classList.contains("modulegroup-tag-area"))break;
+            }
+            console.log(e.path[i])
+            if(e.wheelDelta>0){
+                e.path[i].scrollLeft -=10;
+            }else{
+                e.path[i].scrollLeft +=10;
+            }
+        },
         dragmodule:function(moduleobj, e){
             console.log("drag", moduleobj);
             e.dataTransfer.setData('text/plain' , JSON.stringify(moduleobj));

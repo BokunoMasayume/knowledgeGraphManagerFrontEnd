@@ -127,7 +127,7 @@
                     <!-- TODO  模板分类管理-->
                     <div class="modulegroup">
                         <div class="control-bar">
-                            <div class="modulegroup-tag-area">
+                            <div @mousewheel="scrollmodulegrouptag($event)" class="modulegroup-tag-area">
                                 <div class="module-group-path" @click="clickModuleGroup(null)"><span>#</span>/</div>
                                 <div v-for="group in currentModuleGroupPath" class="module-group-path" @click="clickModuleGroup(group)"><span>{{group.groupName}}</span>/</div>
 
