@@ -123,7 +123,7 @@
                         <file-tree-item v-for="file in getFileChildren(null)" :fileobj="file"></file-tree-item>
                     </div>
                 </div>
-                <div class="module"  @click="current= null" v-if="ldrawerContent==='module'">
+                <div class="module"   v-if="ldrawerContent==='module'">
                     <!-- TODO  模板分类管理-->
                     <div class="modulegroup">
                         <div class="control-bar">
@@ -179,7 +179,22 @@
                     </div>
                     <!-- TODO　关系模板显示位置 -->
                     <div class="rela-module-group">
-
+                        <div class="control-bar" @click="visibleHandler.relaModuleTag = !visibleHandler.relaModuleTag">
+                            <div id="add-rela-module" @click.stop="postmodule(true)">
+                                <svg viewBox="0 0 1024 1024" height="20" width="20">
+                                    <path class="pluspath" d="M858.88 448H576V167.68a64 64 0 0 0-128 0V448H169.6a64 64 0 0 0 0 128H448v280.32a64 64 0 0 0 128 0V576h280.32a64 64 0 0 0 0-128z" ></path>
+                                </svg>
+                            </div>
+                            <div id="remove-rela-module" @click.stop="deletemodule(true)">
+                                <svg viewBox="0 0 1024 1024" height="20" width="20">
+                                    <path class='minuspath' d="M972.8 494.933333c0 22.755556-17.066667 45.511111-45.511111 45.511111H96.711111c-22.755556 0-45.511111-17.066667-45.511111-45.511111s17.066667-45.511111 45.511111-45.511111h836.266667c22.755556 0 39.822222 17.066667 39.822222 45.511111z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div v-show="visibleHandler.relaModuleTag">
+                            <div  v-for="module in currentRelaModules"  @click.stop="clickRelaModule(module)">{{module.id}}-{{module.labelName}}- {{module.node}}</div>
+                            
+                        </div>
                     </div>
                 </div>
                 <div class="search" v-if="ldrawerContent==='search'">
@@ -191,8 +206,11 @@ a
             <div class="graph-canvas" >
                 <svg @dragover="canvasdragover($event)" @drop="canvasdrop($event)" width="2000" height="2000" viewBox="0 0 2000 2000" id="main">
                     <defs>
-                        <marker id="arrowhead" viewBox="0 -5  10 10" refX="35" refY='0' orient="auto" markerWidth="5" markerHeight="5" xoverflow="visible">
+                        <marker id="arrow" viewBox="0 -5 10 10" refX="10" refY='0' orient="auto" markerWidth="13" markerHeight="13" xoverflow="visible" markerUnits="userSpaceOnUse">
                             <path d="M 0 -5 L 10 0 L 0 5" fill="rgb(0, 82, 121)" stroke="none"></path>
+                        </marker>
+                        <marker id="point" viewBox="-5 -5 10 10" refX="-10" refY='0' orient="auto" markerWidth="10" markerHeight="10" xoverflow="visible" markerUnits="userSpaceOnUse">
+                            <circle r="5" cx="0" cy="0" fill="rgb(0, 82, 121)"></circle>
                         </marker>
                         <clipPath id="circlepath" clipPathUnits="objectBoundingBox">
                             <circle r=".5" cx=".5" cy=".5"></circle>
@@ -202,7 +220,7 @@ a
                     <g class="nodegroup"></g>
                 </svg>
             </div>
-            <div class="rdrawer" v-if="current &&( current===currentModule || current=== currentNode || current === currentRelation)">
+            <div class="rdrawer" v-if="current &&( current===currentModule || current=== currentNode || current === currentRelation || current === currentRelationModule)">
                 <div class="rd-module" v-if="current!==null && current===currentModule">
                     <div class="title-bar">
                         <div class="avatar-area">
@@ -253,6 +271,40 @@ a
                     <div >
                         <div id="rd-module-btn" @click="patchmodule()">
                             {{currentModule.id?'修改':'修改'}}
+                        </div>
+                    </div>
+                </div>
+                <div class="rd-rela-module" v-if="current!==null && current===currentRelationModule" >
+                    <div class="title-bar">
+fffffffff
+                    </div>
+                    <div class="type-props">
+                        <div class="type-prop-item">
+                            <div>
+                            <label for="m-rela-describe">描述</label>
+                            </div>
+                            <textarea id="m-rela--describe" v-model.trim="currentRelationModule.describe"  placeholder="请输入模板描述信息"></textarea>
+                        </div>
+                     
+                    </div>
+                    <div class="user-prop-controller">
+                        <div id="add-rela-module-prop" @click="showPropBar()">
+                            <svg viewBox="0 0 1024 1024" height="20" width="20">
+                                <path class="pluspath" d="M858.88 448H576V167.68a64 64 0 0 0-128 0V448H169.6a64 64 0 0 0 0 128H448v280.32a64 64 0 0 0 128 0V576h280.32a64 64 0 0 0 0-128z" ></path>
+                            </svg>
+                        </div>
+                        <div id="remove-rela-module-prop" @click="deleteProp()">
+                            <svg viewBox="0 0 1024 1024" height="20" width="20">
+                                <path class='minuspath' d="M972.8 494.933333c0 22.755556-17.066667 45.511111-45.511111 45.511111H96.711111c-22.755556 0-45.511111-17.066667-45.511111-45.511111s17.066667-45.511111 45.511111-45.511111h836.266667c22.755556 0 39.822222 17.066667 39.822222 45.511111z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="user-props">
+                        <user-prop-item class="user-prop-item" v-for="(prop,name,index) in currentRelationModule.properties" :index="index" :objprop.sync="prop.default" :propcontraint.sync="prop.contraint"><div class="user-prop-name" @click="clickProp(name)">{{name}}</div></user-prop-item>
+                    </div>
+                    <div >
+                        <div id="rd-rela-module-btn" @click="patchmodule(true)">
+                            {{currentRelationModule.id?'修改':'修改'}}
                         </div>
                     </div>
                 </div>

@@ -86,8 +86,21 @@ function ticked(){
                 let dis = Math.sqrt(dx*dx+dy*dy);
                 // console.log(midx+d.multipleLineIndex*symbol*100*dx/dis);
 
+                let mx = midx-d.multipleLineIndex*symbol*40*dy/dis;
+                let my = midy+d.multipleLineIndex*symbol*40*dx/dis;
+
+                let dx1 = (mx - d.source.x);
+                let dy1 = (my - d.source.y);
+                let dis1 = Math.sqrt(dx1*dx1 + dy1*dy1);
+
+                let dx2 = (d.target.x - mx);
+                let dy2 = (d.target.y - my);
+                let dis2 = Math.sqrt(dx2*dx2 + dy2*dy2);
+
+
+
                 // return `M${d.source.x} ${d.source.y} Q ${midx+d.multipleLineIndex*symbol*100*dx/dis} ${midy-d.multipleLineIndex*symbol*100*dy/dis} ,${d.target.x} ${d.target.y}` ;
-                return `M${d.source.x} ${d.source.y} Q  ${midx-d.multipleLineIndex*symbol*40*dy/dis} ${midy+d.multipleLineIndex*symbol*40*dx/dis},${d.target.x} ${d.target.y}` ;
+                return `M${d.source.x+25*dx1/dis1} ${d.source.y+25*dy1/dis1} Q  ${mx} ${my},${d.target.x-25*dx2/dis2} ${d.target.y-25*dy2/dis2}` ;
             });
     
 
@@ -199,7 +212,7 @@ function genforceSimu(domid , ns , es ){
     nodes = ns;
     edges = es;
     simulation = d3.forceSimulation(nodes)
-                    .force("link" , d3.forceLink(edges).id((d)=>{return d.id;}).iterations(10).distance(150))
+                    .force("link" , d3.forceLink(edges).id((d)=>{return d.id;}).iterations(10).distance(180))
                     .force("charge", d3.forceManyBody().strength(-60))
                     .force("center",d3.forceCenter().x(w/2).y(h/2))
                     // .force("center",d3.forceCenter().x(svg.attr('width')/2).y(svg.attr('height')/2))
@@ -272,7 +285,8 @@ function updateSimu(gnodes, gedges , rerender){
                 })
     edgeElesEnter.append('path')
             .attr('id' , function(d){return "path"+d.relaUnit.id})
-            .attr('marker-end','url(#arrowhead)')
+            .attr('marker-end','url(#arrow)')
+            .attr("marker-start", "url(#point)")
             .attr('class','edgeline');
     edgeElesEnter.append('text')
                  .attr('class','edgetext')

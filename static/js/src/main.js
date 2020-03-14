@@ -91,7 +91,7 @@ window.app = new Vue({
         current:null,
 
         // updated 3/14 for module group
-        currentRelaModule:null,
+        currentRelationModule:null,
         currentModuleGroup:null,
 
         moduleMap:{},
@@ -232,6 +232,12 @@ window.app = new Vue({
             // console.log(this);
             this.current = moduleobj;
             this.currentModule  = moduleobj;
+        },
+        clickRelaModule:function(moduleobj){
+            this.currentProp = null;
+            console.log("in click rela module",moduleobj);
+            this.current = moduleobj;
+            this.currentRelationModule = moduleobj;
         },
         clickFile:function(fileobj ,e){
             this.currentProp = null;
@@ -479,6 +485,9 @@ window.app = new Vue({
 
             }else if(this.current && this.current === this.currentRelation){
                 document.querySelector('.rd-rela').querySelector('.user-props').appendChild(addPropBar);
+            }else if(this.current && this.current === this.currentRelationModule){
+                document.querySelector('.rd-rela-module').querySelector('.user-props').appendChild(addPropBar);
+
             }
         },
         appendProp:function(propname){
@@ -486,6 +495,9 @@ window.app = new Vue({
                 // console.log(">>>",propname)
                 if(!this.currentModule.properties)Vue.set(this.currentModule , "properties" ,{});
                 Vue.set(this.currentModule.properties, propname, {default:"", contraint:"string"} );
+            }else if(this.current && this.current=== this.currentRelationModule){
+                if(!this.currentRelationModule.properties)Vue.set(this.currentRelationModule , "properties" ,{});
+                Vue.set(this.currentRelationModule.properties, propname, {default:"", contraint:"string"} );
             }else if( this.current && this.current=== this.currentNode){
                 if(!this.currentNode.properties)Vue.set(this.currentNode , "properties" ,{});
                 
@@ -502,6 +514,8 @@ window.app = new Vue({
             if(addPropBar.parentElement)addPropBar.parentElement.removeChild(addPropBar);
             if(this.current && this.current ===this.currentModule){
                 Vue.delete(this.currentModule.properties, this.currentProp );
+            }else if(this.current && this.current=== this.currentRelationModule){
+                Vue.delete(this.currentRelationModule.properties, this.currentProp );
             }else if( this.current && this.current=== this.currentNode){
                 Vue.delete(this.currentNode.properties, this.currentProp);
             }else if(this.current && this.current === this.currentRelation){
@@ -509,21 +523,22 @@ window.app = new Vue({
             }
         } ,
 
-        postmodule:function(){
+        postmodule:function(isRela){
             requireHandler.module.addOne({
                 labelName:  "tmp"+ new Date().getTime(),
-                groupId: this.currentModuleGroup.id,
-                node:true
+                groupId: this.currentModuleGroup?this.currentModuleGroup.id:null,
+                node:isRela?false:true
             }).then((res)=>{
                 if(res.data){
                     this.userModules.push(res.data);
-                    this.current = this.currentModule = res.data;
+                    if(res.data.node)this.current = this.currentModule = res.data;
+                    else this.current = this.currentRelationModule = res.data;
                     this.moduleMap[this.current.labelName] = this.current;
                 }
             }).catch(()=>{alert('添加模板失败')})
         },
-        deletemodule:function(){
-            requireHandler.module.deleteOne(this.currentModule.id)
+        deletemodule:function(isRela){
+            requireHandler.module.deleteOne(isRela?this.currentRelationModule.id:this.currentModule.id)
                 .then((res)=>{
                     if(res.data){
                         // console.log("dele mod",res.data);
@@ -533,16 +548,18 @@ window.app = new Vue({
                     }
                 })
         },
-        patchmodule:function(){
-            requireHandler.module.patchOne(this.currentModule.id, {
+        patchmodule:function(isRela){
+            let mod = isRela?this.currentRelationModule:this.currentModule;
+            requireHandler.module.patchOne(isRela?this.currentRelationModule.id:this.currentModule.id, {
                 rawMap:{
-                    properties:this.currentModule.properties,
-                    avatarUri : this.currentModule.avatarUri,
-                    labelName: this.currentModule.labelName,
-                    describe: this.currentModule.describe,
-                    node: this.currentModule.node,
-                    abstr: this.currentModule.abstr,
-                    parentIds: this.currentModule.parentIds
+                    properties:mod.properties,
+                    avatarUri : mod.avatarUri,
+                    labelName: mod.labelName,
+                    describe: mod.describe,
+                    // node: this.currentModule.node,
+                    abstr: mod.abstr,
+                    parentIds: mod.parentIds,
+                    style:mod.style
                 }
             }).then(res=>{
                 if(res.data){

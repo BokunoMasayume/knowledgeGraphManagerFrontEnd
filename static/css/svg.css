@@ -277,7 +277,7 @@ svg:hover #searchpath{
 
 }
 
-.rdrawer .user-prop-controller>div:hover .pluspath , #add-module:hover .pluspath{
+.rdrawer .user-prop-controller>div:hover .pluspath , #add-module:hover .pluspath , #add-rela-module:hover .pluspath{
     stroke:rgb(122, 252, 245);
     stroke-width: 15px;
     /* fill:none; */
@@ -298,7 +298,7 @@ svg:hover #searchpath{
 
 }
 
-.rdrawer .user-prop-controller>div:hover .minuspath , #remove-module:hover .minuspath{
+.rdrawer .user-prop-controller>div:hover .minuspath , #remove-module:hover .minuspath , #remove-rela-module:hover .minuspath{
     stroke:rgb(122, 252, 245);
     stroke-width: 15px;
     /* fill:none; */
