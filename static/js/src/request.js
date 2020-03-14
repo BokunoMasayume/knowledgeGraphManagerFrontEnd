@@ -198,6 +198,22 @@ function requireFactory(showcallback) {
          })
      }
 
+
+     function getAllModuleGroup(){
+         return APIaxios.get('/modulegroup');
+     }
+
+     function addModuleGroup(modulegroup){
+         return APIaxios.post("/modulegroup" , modulegroup);
+     }
+
+     function deleteModuleGroup(modulegroupId){
+         return APIaxios.delete(`/modulegroup/${modulegroupId}`);
+     }
+
+     function putModleGroup(modulegroupId , modulegroup){
+         return APIaxios.put(`/modulegroup/${modulegroupId}` , modulegroup);
+     }
     
 
 
@@ -219,8 +235,17 @@ function requireFactory(showcallback) {
             getAll: getmodules,
             addOne: addmodule,
             deleteOne: deletemodule,
-            patchOne: patchmodule
+            patchOne: patchmodule,
+
+            group:{
+                getAll: getAllModuleGroup,
+                addOne: addModuleGroup,
+                deleteOne: deleteModuleGroup,
+                putOne: putModleGroup
+
+            }
         },
+
 
         graph: {
             rela: {

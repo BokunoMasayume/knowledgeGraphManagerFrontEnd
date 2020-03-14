@@ -12,7 +12,7 @@
 }
 
 /**csstag folder icon style*/
-.file-tree-node:hover .foldericon{
+.file-tree-node:hover .foldericon , .module-group-item:hover .foldericon{
     stroke:none;
     fill:rgb(122, 252, 245);
     stroke-width: 20px;
@@ -23,9 +23,24 @@
     stroke:none;
     stroke-width: 20px;
 }
+/* csstag back to parent path */
+.backparent{
+    fill:rgb(5, 83, 78);
+
+}
+#back-to-parent-group:hover .backparent{
+    stroke:rgb(122, 252, 245);
+    stroke-width: 15px;
+    /* fill:none; */
+    /* animation:move 3s linear forwards infinite ; */
+
+    /* stroke-dasharray: 50%,50%; */
+
+    fill:rgb(122, 252, 245);
+}
 
 /** csstag add folder icon style*/
-.filetree>.control-bar>.add-folder #folderaddpath{
+ .folderaddpath{
     /* fill:none; */
     /* stroke:rgb(9, 253, 241); */
     /* stroke-width: 10px; */
@@ -34,7 +49,7 @@
 
 }
 
-.filetree>.control-bar>.add-folder:hover #folderaddpath{
+.filetree>.control-bar>.add-folder:hover .folderaddpath , #add-modulegroup:hover .folderaddpath{
     stroke:rgb(122, 252, 245);
     stroke-width: 15px;
     /* fill:none; */
@@ -61,14 +76,14 @@
     fill:rgb(122, 252, 245);
 }
 /**csstag remove file or folder icon style*/
-.filetree>.control-bar>.delete #deletepath{
+.deletepath{
    
 
     fill:rgb(5, 83, 78);
 
 }
 
-.filetree>.control-bar>.delete:hover #deletepath{
+.filetree>.control-bar>.delete:hover .deletepath , #remove-modulegroup:hover .deletepath{
     stroke:rgb(122, 252, 245);
     stroke-width: 15px;
   

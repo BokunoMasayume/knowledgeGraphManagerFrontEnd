@@ -47,7 +47,10 @@ window.app = new Vue({
         baseURL: "http://localhost:8889",
         visibleHandler:{
             signinbox:false,
-            islogin:true
+            islogin:true,
+
+            nodeModuleTag: true,
+            relaModuleTag: true
         },
         input:{
             uname:"",
@@ -68,6 +71,7 @@ window.app = new Vue({
         userFiles:[],
 
         userModules:[],
+        userModulegroups:[],
 
         graph:{
             relations:[],
@@ -85,6 +89,10 @@ window.app = new Vue({
         currentRelation:null,
         currentNode:null,
         current:null,
+
+        // updated 3/14 for module group
+        currentRelaModule:null,
+        currentModuleGroup:null,
 
         moduleMap:{},
         
@@ -125,6 +133,36 @@ window.app = new Vue({
     },
 
     computed:{
+        currentModuleGroupPath:function(){
+            let path = [];
+            let cur = this.currentModuleGroup;
+            while(cur){
+                path.push(cur);
+                //TODO use filter not very efficient
+                cur = this.userModulegroups.filter((el)=>{return el.id === cur.parentId;})[0];
+                console.log("cur",cur);
+            }
+            console.log(path);
+            return path.reverse();
+        },
+        subModuleGroups:function(){
+            
+            return this.userModulegroups.filter((el)=>{
+
+                return el.parentId===(this.currentModuleGroup?this.currentModuleGroup.id:null);
+            })
+        },
+        currentNodeModules:function(){
+            return this.userModules.filter((el)=>{
+                return el.node&& el.groupId===(this.currentModuleGroup?this.currentModuleGroup.id:null);
+            })
+        },
+        currentRelaModules:function(){
+          return this.userModules.filter((el)=>{
+              return !el.node && el.groupId===(this.currentModuleGroup?this.currentModuleGroup.id:null);
+          })  
+        },
+
         graphnodes:function(){
             return this.graph.nodes;
         },
@@ -158,11 +196,15 @@ window.app = new Vue({
             clickFile: this.clickFile,
             clickModule: this.clickModule,
             dragmodule: this.dragmodule,
-            appendFile:this.appendFile
+            appendFile:this.appendFile,
+            clickModuleGroup: this.clickModuleGroup
         }
     },
     
     methods:{
+        clickModuleGroup:function(modulegroupobj){
+            this.currentModuleGroup = modulegroupobj;
+        },
         clickProp:function(name){
             this.currentProp = name;
         },
@@ -235,8 +277,9 @@ window.app = new Vue({
             for(let prop in moduleobj.properties){
                 node.properties[prop] = moduleobj.properties[prop].default;
             }
-            //have on focus file
+            //have on-focus file
             if(this.currentFile) forcedgraph.insertNode(node);
+            else{alert("请先选择文件")}
             console.log("drop",node);
         },
         canLogin:function(){
@@ -300,6 +343,7 @@ window.app = new Vue({
                 return ele.parentId === fileid;
             });
         },
+       
         //TODO upload image function 
         uploadimage:function(e){
             console.log("file",e);
@@ -454,7 +498,9 @@ window.app = new Vue({
 
         postmodule:function(){
             requireHandler.module.addOne({
-                labelName:  "tmp"+ new Date().getTime()
+                labelName:  "tmp"+ new Date().getTime(),
+                groupId: this.currentModuleGroup.id,
+                node:true
             }).then((res)=>{
                 if(res.data){
                     this.userModules.push(res.data);
@@ -699,6 +745,20 @@ window.app = new Vue({
     },
 
     components:{
+        "module-group-item":{
+            name: "module-group-item",
+            template:`
+                <div @click.stop="clickModuleGroup(groupobj)" class="module-group-item">
+                    <svg viewBox="-100 -100 1024 1024" width="20" height="20">
+                        <path  class='foldericon' d="M807.86 256.55H542v-38.56c0-66.17-53.83-120-120-120H131.17c-16.54 0-29.97 13.39-30 29.94l-0.41 203.56c0 1.5 0.11 2.98 0.32 4.43l-0.9 467.44c0 66.17 53.83 120 120 120h587.69c66.17 0 120-53.83 120-120V376.55c-0.01-66.16-53.84-120-120.01-120zM422 157.99c33.08 0 60 26.92 60 60v38.56H160.91l0.2-98.56H422z m445.86 645.37c0 33.08-26.92 60-60 60H220.17c-33.08 0-60-26.92-60-59.94l0.94-486.87h646.75c33.08 0 60 26.92 60 60v426.81z" ></path>                      
+                    </svg>
+                    {{groupobj.groupName}}  
+                </div>
+            `,
+            props:['groupobj'],
+            inject:["clickModuleGroup"]
+        },
+
         "user-prop-item":{
             name: "user-prop-item",
             template:`
@@ -826,23 +886,26 @@ window.app = new Vue({
             //and then request user information , userinfo , userfiles and usermodules
 
             requireHandler.refreshToken().then(()=>{
-                return Promise.all([ requireHandler.userInfo() , requireHandler.file.getAll() , requireHandler.module.getAll()  ]);
+                return Promise.all([ requireHandler.userInfo() , requireHandler.file.getAll() , requireHandler.module.getAll(),requireHandler.module.group.getAll()  ]);
             }).then((responses)=>{
                 this.userInfo = responses[0].data;
                 this.userFiles = responses[1].data;
                 this.userModules = responses[2].data;
+                this.userModulegroups = responses[3].data;
             }).catch(()=>{
-                alert("fail to refresh token and get your info");
+                alert("获取用户信息失败，请重新登录");
                 this.visibleHandler.signinbox = true;
             });
 
         }else{
             //just request user information
-            Promise.all([ requireHandler.userInfo() , requireHandler.file.getAll() , requireHandler.module.getAll()  ])
+            Promise.all([ requireHandler.userInfo() , requireHandler.file.getAll() , requireHandler.module.getAll() ,requireHandler.module.group.getAll()   ])
             .then((responses)=>{
                 this.userInfo = responses[0].data;
                 this.userFiles = responses[1].data;
                 this.userModules = responses[2].data;
+                this.userModulegroups = responses[3].data;
+
             }).catch(()=>{
                 alert("fail to refresh token and get your info");
                 this.visibleHandler.signinbox = true;
