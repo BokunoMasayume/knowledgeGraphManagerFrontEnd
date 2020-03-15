@@ -5,6 +5,7 @@ import forcedgraph from './forcedgraph';
 
 
 // dynamic bars
+//append file bar
 window.addFileBar = document.createElement('div')
 addFileBar.setAttribute('id','add-file-bar');
 addFileBar.classList.add('file-tree-item');
@@ -18,7 +19,7 @@ input.addEventListener('change' , function(e){
 })
 addFileBar.appendChild(input);
 
-
+//append folder bar
 window.addFolderBar = document.createElement('div')
 addFolderBar.setAttribute('id','add-folder-bar');
 addFolderBar.classList.add('file-tree-item');
@@ -32,6 +33,7 @@ input2.addEventListener('change',function(e){
 })
 addFolderBar.appendChild(input2);
 
+//append property bar
 window.addPropBar = document.createElement('div')
 addPropBar.setAttribute('id','add-prop-bar');
 let input3 = document.createElement('input');
@@ -41,6 +43,16 @@ input3.addEventListener('change',function(e){
     app.appendProp(e.target.value.trim());
 })
 addPropBar.appendChild(input3);
+
+//append module group bar
+window.addModulegroupBar = document.createElement('div');
+addModulegroupBar.setAttribute('id','add-modulegroup-bar');
+let input4 = document.createElement('input');
+input4.setAttribute('type','text');
+input4.addEventListener('change', function(e){
+    app.postModulegroup(e.target.value.trim());
+})
+addModulegroupBar.appendChild(input4);
 
 window.app = new Vue({
     el: "#app",
@@ -204,6 +216,13 @@ window.app = new Vue({
     },
     
     methods:{
+        backtoparent:function(){
+            let cur = this.currentModuleGroup;
+            if(!cur)return;
+            cur = this.userModulegroups.filter((el)=>{return el.id === cur.parentId;})[0];
+            if(cur)this.currentModuleGroup = cur;
+            else this.currentModuleGroup = null;
+        },
         clickModuleGroup:function(modulegroupobj){
             this.currentModuleGroup = modulegroupobj;
         },
@@ -776,6 +795,40 @@ window.app = new Vue({
                 this.clickFile(this.currentFile, {currentTarget:this.currentFileEle});
             }).catch(()=>{
                 alert("保存失败")
+            });
+        },
+        showModulegroupBar:function(){
+            if(addModulegroupBar.parentElement)addModulegroupBar.parentElement.removeChild(addModulegroupBar);
+            document.querySelector('#submodulegroup-area').appendChild(addModulegroupBar);
+        },
+        postModulegroup:function(modulegroupname){
+            requireHandler.module.group.addOne({
+                groupName:modulegroupname,
+                parentId:this.currentModuleGroup?this.currentModuleGroup.id:null
+            }).then(response=>{
+                if(response.data){
+                    this.userModulegroups.push(response.data);
+                }
+            }).finally(()=>{
+                addModulegroupBar.parentElement.removeChild(addModulegroupBar);
+            });
+        },
+        deleteModulegroup:function(){
+            if(!this.currentModuleGroup){
+                alert("未选中要删除的分组");
+                return;
+            }
+            requireHandler.module.group.deleteOne(this.currentModuleGroup.id)
+            .then(response=>{
+                if(response.data){
+                    this.userModulegroups = this.userModulegroups.filter(mg=>mg.id!=response.data.id);
+                    this.backtoparent();
+                }
+                else{
+                    alert("删除操作未成功，不能删除有子分组的分组");
+                }
+            }).catch(()=>{
+                alert("删除操作不成功，不能删除仍有模板的分组")
             });
         }
 
