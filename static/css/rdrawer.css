@@ -105,7 +105,7 @@
     color:white;
 }
 
-.rdrawer .user-props input{
+.rdrawer  input{
     outline: none;
     border:none;
     background-color: black ;
@@ -114,10 +114,10 @@
     text-align: center;
 }
 
-.rdrawer .user-props input:hover{
+.rdrawer  input:hover{
     border-bottom: 1px solid white;
 }
-.rdrawer .user-props input:focus{
+.rdrawer  input:focus{
     border-bottom: 1px solid white;
 }
 
@@ -137,12 +137,12 @@
     display: flex;
 }
 
-.rdrawer .user-prop-item select{
+.rdrawer  select{
     border:none;
     background-color: black;
     color:rgb(255, 255, 255);
 }
-.rdrawer .user-prop-item select:hover{
+.rdrawer  select:hover{
     border:none;
     border-bottom: 1px solid white;
 }
@@ -279,4 +279,61 @@
 }
 .rd-rela #rd-rela-btn:hover{
     background-color: rgb(1, 174, 255);
+}
+
+
+
+/**rdrawer 关系模板样式**/
+.rdrawer .rd-rela-module .title-bar{
+    padding:10px ;
+}
+.rdrawer .rd-rela-module .type-props{
+    padding:10px;
+    /* border-top: 1px solid rgb(4, 56, 53);
+    border-bottom: 1px solid rgb(4, 56, 53); */
+}
+.rdrawer .rd-rela-module .type-props>.type-prop-item{
+    display: flex;
+    justify-content: space-evenly;
+    margin: 10px 0;
+}
+.rdrawer .rd-rela-module .type-props>.type-prop-item>*{
+    width:50%;
+    text-align: center;
+}
+
+
+.rd-rela-module textarea{
+    outline: none;
+    color:white;
+    background-color: black;
+    border:none;
+    resize: none;
+}
+.rd-rela-module textarea:focus{
+    border:1px solid white;
+}
+.rd-rela-module textarea::-webkit-scrollbar{
+    width:3px;
+}
+
+
+.rdrawer .rd-rela-module #rd-rela-module-btn{
+    min-width: 100px;
+    text-align: center;
+    padding:10px ;
+    margin:0 20%;
+    border:1px solid rgb(1, 174, 255);
+    letter-spacing: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.rdrawer .rd-rela-module #rd-rela-module-btn:hover{
+    background-color: rgb(1, 174, 255);
+    /* margin: 10px; */
+}
+.rd-rela-module>div{
+    /* margin: 10px 0; */
+    padding:15px 0 ;
+    border-bottom: 1px solid rgb(4, 59, 56);
 }

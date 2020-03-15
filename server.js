@@ -20,7 +20,7 @@ server.on("request" , function(request , response){
 	
 	console.log("url in request",request.url);
 	console.log("pathname in url parse" , parsedUrl.pathname);
-	console.log("search in url parse" , parsedUrl.query);
+	console.log("search in url parse" , JSON.stringify(parsedUrl.query));
 	console.log("request method" , request.method);
 
 	let query;
@@ -44,17 +44,19 @@ server.on("request" , function(request , response){
 		});
 	}
 	else /*if( parsedUrl.pathname.startsWith("/js") )*/ {
-		console.log(parsedUrl.pathname);
-		fs.readFile('.'+parsedUrl.pathname ,function(err,data){
-			if(err){
-				response.writeHead(500,{"Content-Type":"text/plain"});
-				response.end("error");
-			}else{
-				//response.writeHead(200, {"Content-Type": "text/html;charset=utf-8"});
-				response.write(data);
-				response.end();
-			}
-		});
+		// console.log(parsedUrl.pathname);
+		// fs.readFile('.'+parsedUrl.pathname ,function(err,data){
+		// 	if(err){
+		// 		response.writeHead(500,{"Content-Type":"text/plain"});
+		// 		response.end("error");
+		// 	}else{
+		// 		//response.writeHead(200, {"Content-Type": "text/html;charset=utf-8"});
+		// 		response.write(data);
+		// 		response.end();
+		// 	}
+		// });
+
+		sendFile('.'+parsedUrl.pathname , response);
 	}
 	// else{
 		
@@ -166,7 +168,10 @@ function sendFile(filepath , response){
 				response.writeHead(500,{"Content-Type":"text/plain"});
 				response.end("error");
 			}else{
-				response.writeHead(200, {"Content-Type": "text/html;charset=utf-8"});
+				if(/.svg$/.test(filepath)){
+					response.writeHead(200, {"Content-Type": "image/svg+xml;charset=utf-8"});
+				}
+				// else response.writeHead(200, {"Content-Type": "text/html;charset=utf-8"});
 				response.write(data);
 				response.end();
 			}

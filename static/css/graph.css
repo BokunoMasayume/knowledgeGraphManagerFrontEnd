@@ -12,7 +12,7 @@
     cursor: pointer;
 }
 .edge .edgeline{
-    stroke: rgb(9, 109, 190);
+    /* stroke: rgb(9, 109, 190); */
     /* stroke-dasharray: 20% 40% 20%; */
     stroke-width: 2px;
     fill:none;
@@ -21,13 +21,14 @@
 
 .edge .edgetext{
     /* alignment-baseline:after-edge; */
-    dominant-baseline:central;
+    /* dominant-baseline:central; */
     fill:white;
 
 }
 .edge .edgetext>textPath{
     /* dominant-baseline:central; */
     /* stroke:blue; */
+    alignment-baseline:middle;
 }
 .edge:hover .edgeline{
     stroke:rgba(255, 81, 0, 0.226);

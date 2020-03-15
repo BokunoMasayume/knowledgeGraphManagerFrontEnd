@@ -181,10 +181,21 @@ function genforceSimu(domid , ns , es ){
                 d3.select('#templine').remove();
                 endEle = simulation.find(e.offsetX, e.offsetY ,55);
                 if(endEle){
+                    let props = {};
+                    // if(app.currentRelationModule){
+                    //     Object.assign(props, app.currentRelationModule.properties);
+                    // }
+                    for(let p in app.currentRelationModule.properties){
+                        props[p] = app.currentRelationModule.properties[p].default;
+                    }
                     insertEdge({
                         source:startEle.id,
                         target:endEle.id,
-                        relaUnit:{id:-1}
+                        relaUnit:{
+                            id:-1,
+                            relationName:app.currentRelationModule?app.currentRelationModule.labelName:"",
+                            properties:props
+                        }
                     });    
                 console.log(startEle , endEle ,e);
                     endEle = null;
@@ -212,7 +223,7 @@ function genforceSimu(domid , ns , es ){
     nodes = ns;
     edges = es;
     simulation = d3.forceSimulation(nodes)
-                    .force("link" , d3.forceLink(edges).id((d)=>{return d.id;}).iterations(10).distance(180))
+                    .force("link" , d3.forceLink(edges).id((d)=>{return d.id;}).iterations(1).distance(180))
                     .force("charge", d3.forceManyBody().strength(-60))
                     .force("center",d3.forceCenter().x(w/2).y(h/2))
                     // .force("center",d3.forceCenter().x(svg.attr('width')/2).y(svg.attr('height')/2))
@@ -285,8 +296,39 @@ function updateSimu(gnodes, gedges , rerender){
                 })
     edgeElesEnter.append('path')
             .attr('id' , function(d){return "path"+d.relaUnit.id})
-            .attr('marker-end','url(#arrow)')
-            .attr("marker-start", "url(#point)")
+            .attr('marker-end',d=>{
+                let mod = app.moduleMap[d.relaUnit.relationName] ;
+                console.log('mod', mod)
+                if(mod && mod.style){
+                    return `url(${mod.style['marker-end']})`;
+                }else{
+                    return 'url(#arrow)';
+                }
+            })
+            .attr("marker-start", d=>{
+                let mod = app.moduleMap[d.relaUnit.relationName] ;
+                if(mod && mod.style){
+                    return `url(${mod.style['marker-start']})`;
+                }else{
+                    return '';
+                }
+            })
+            .attr("stroke",d=>{
+                let mod = app.moduleMap[d.relaUnit.relationName] ;
+                if(mod && mod.style){
+                    return mod.style.stroke;
+                }else{
+                    return 'rgb(9, 109, 190)';
+                }
+            })
+            .attr("stroke-dasharray",d=>{
+                let mod = app.moduleMap[d.relaUnit.relationName] ;
+                if(mod && mod.style){
+                    return mod.style['stroke-dasharray'];
+                }else{
+                    return '';
+                }
+            })
             .attr('class','edgeline');
     edgeElesEnter.append('text')
                  .attr('class','edgetext')

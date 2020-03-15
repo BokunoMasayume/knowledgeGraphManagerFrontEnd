@@ -106,8 +106,7 @@
 
 /*csstag 节点模板样式 */
 .ldrawer .node-module-group{
-    height: 35%;
-    /* overflow: scroll; */
+    /* height: 35%; */
     overflow: hidden;
     overflow-x: visible;
 }
@@ -130,8 +129,8 @@
     justify-content: flex-start;
     align-content: flex-start;
 
-    max-height: 90%;
-    /* height:700px; */
+    /* max-height: 90%; */
+    max-height:400px;
 
     background-color: rgba(0, 0, 0,1);
     overflow-y: scroll;
@@ -184,6 +183,7 @@
 /* csstag 模板分组样式 */
 .ldrawer .module .modulegroup{
     color:white;
+    max-height: 30%;
 }
 .ldrawer .module .modulegroup .control-bar{
     display: flex;
@@ -237,6 +237,7 @@
     padding: 3%;
     border-top: 1px solid rgb(4, 56, 53);
     border-bottom: 1px solid rgb(4, 56, 53);
+    
 
     max-height: 30%;
 }
@@ -245,9 +246,18 @@
 
 }
 .ldrawer .module .rela-module-group>div:nth-child(0n+2){
-    color:white;
+    /* color:white; */
     display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    align-content: flex-start;
+    flex-direction: column;
+    /* flex-wrap: wrap; */
+    /* justify-content: flex-start; */
+    /* align-content: flex-start; */
+}
+
+.ldrawer .module .rela-module-group-body>div{
+   cursor: pointer;
+}
+
+.ldrawer .module .rela-module-group-body>div:hover{
+    background-color: rgb(56, 56, 56);
 }

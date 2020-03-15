@@ -3,6 +3,8 @@ import Vue from 'vue/dist/vue.esm';
 import contextMenuHandler from "./contextMenu";
 import forcedgraph from './forcedgraph';
 
+
+// dynamic bars
 window.addFileBar = document.createElement('div')
 addFileBar.setAttribute('id','add-file-bar');
 addFileBar.classList.add('file-tree-item');
@@ -235,6 +237,7 @@ window.app = new Vue({
         },
         clickRelaModule:function(moduleobj){
             this.currentProp = null;
+            if(!moduleobj.style)moduleobj.style={};
             console.log("in click rela module",moduleobj);
             this.current = moduleobj;
             this.currentRelationModule = moduleobj;
@@ -527,7 +530,11 @@ window.app = new Vue({
             requireHandler.module.addOne({
                 labelName:  "tmp"+ new Date().getTime(),
                 groupId: this.currentModuleGroup?this.currentModuleGroup.id:null,
-                node:isRela?false:true
+                node:isRela?false:true,
+                style:{
+                    stroke:'rgb(9, 109, 190)',
+                    'marker-end':'#arrow'
+                }
             }).then((res)=>{
                 if(res.data){
                     this.userModules.push(res.data);
@@ -807,14 +814,14 @@ window.app = new Vue({
                 </div>
                 <div>
                 <select v-if="propcontraint"  v-model='propcontraint'>
-                    <option>string</option>
-                    <option>boolean</option>
-                    <option>number</option>
+                    <option value='string'>string</option>
+                    <option value='boolean'>boolean</option>
+                    <option value='number'>number</option>
                 </select>
                 <select v-else  v-model='propcontraint'>
-                    <option>string</option>
-                    <option>boolean</option>
-                    <option>number</option>
+                    <option  value='string'>string</option>
+                    <option value='boolean'>boolean</option>
+                    <option value='number'>number</option>
                 </select>
                 </div>
             </div>
@@ -837,7 +844,7 @@ window.app = new Vue({
             template:`
                 <div @contextmenu="testmenu(moduleobj, $event)" @click.stop="clickModule(moduleobj);" @dragstart="dragmodule(moduleobj,$event)" :class="{'module-item':true, 'focus':$root.currentModule && $root.currentModule.id===moduleobj.id}">
                     <div class='avatar'>
-                        <svg width="30" height="30" viewBox="0 0 50 50">
+                        <svg width="40" height="40" viewBox="0 0 50 50">
                             <image :xlink:href="moduleobj.avatarUri?$root.baseURL+'/image/'+moduleobj.avatarUri:'./static/moduleavatar.png'" width="50" height="50" />
                             <circle r="24" cx="25"  cy="25" class="circleclippath" /> 
                         </svg>

@@ -191,8 +191,18 @@
                                 </svg>
                             </div>
                         </div>
-                        <div v-show="visibleHandler.relaModuleTag">
-                            <div  v-for="module in currentRelaModules"  @click.stop="clickRelaModule(module)">{{module.id}}-{{module.labelName}}- {{module.node}}</div>
+                        <div class="rela-module-group-body" v-show="visibleHandler.relaModuleTag">
+                            <div  v-for="module in currentRelaModules"  @click.stop="clickRelaModule(module)">
+                                <svg width="100%" height="40" viewBox="-100 0 200 50">
+                                    <path :stroke-dasharray="module.style?module.style['stroke-dasharray']:''" :id="'ldl'+module.id" d="M -120 25 L 120 25" :stroke="module.style?module.style.stroke:'rgb(122, 252, 245)'" stroke-width="3" :marker-start="module.style?'url('+module.style['marker-start']+')':''" :marker-end="module.style?'url('+module.style['marker-end']+')':'url(#arrow)'"> </path>
+                                    <text style="text-anchor:middle;stroke:white;">
+                                        <textPath alignment-baseline="middle" startOffset="50%" :href="'#ldl'+module.id">{{module.labelName}}</textPath>
+                                    </text>
+                                </svg>
+                                <!-- <div class="relationame">
+                                    
+                                </div> -->
+                            </div>
                             
                         </div>
                     </div>
@@ -209,8 +219,24 @@ a
                         <marker id="arrow" viewBox="0 -5 10 10" refX="10" refY='0' orient="auto" markerWidth="13" markerHeight="13" xoverflow="visible" markerUnits="userSpaceOnUse">
                             <path d="M 0 -5 L 10 0 L 0 5" fill="rgb(0, 82, 121)" stroke="none"></path>
                         </marker>
+                        <marker id="arrowhole" viewBox="0 -5 10 10" refX="10" refY='0' orient="auto" markerWidth="13" markerHeight="13" overflow="visible" markerUnits="userSpaceOnUse">
+                            <path d="M 0 -5 L 10 0 L 0 5 z" stroke="rgb(0, 82, 121)" stroke-width="2"></path>
+                        </marker>
                         <marker id="point" viewBox="-5 -5 10 10" refX="-10" refY='0' orient="auto" markerWidth="10" markerHeight="10" xoverflow="visible" markerUnits="userSpaceOnUse">
                             <circle r="5" cx="0" cy="0" fill="rgb(0, 82, 121)"></circle>
+                        </marker>
+                        <marker id="circle" viewBox="-5 -5 10 10" refX="-10" refY='0' orient="auto" markerWidth="10" markerHeight="10" overflow="visible" markerUnits="userSpaceOnUse">
+                            <circle r="5" cx="0" cy="0" stroke-width="2" stroke="rgb(0, 82, 121)"></circle>
+                        </marker>
+                        <marker id="singline" viewBox="-1 -5 2 10" refX="-5" refY='0' orient="auto" markerWidth="2" markerHeight="14" xoverflow="visible" markerUnits="userSpaceOnUse">
+                            <line x1="0" y1="-6" x2="0" y2="6" stroke-width="4" stroke= "rgb(0, 82, 121)"></line>   
+                        </marker>
+                        <marker id="douline" viewBox="-7 -7 10 14" refX="-15" refY='0' orient="auto" markerWidth="10" markerHeight="14" xoverflow="visible" markerUnits="userSpaceOnUse">
+                            <line x1="0" y1="-7" x2="0" y2="7" stroke-width="3" stroke= "rgb(0, 82, 121)"></line>   
+                            <line x1="-5" y1="-7" x2="-5" y2="7" stroke-width="3" stroke= "rgb(0, 82, 121)"></line>   
+                        </marker>
+                        <marker id="rhomb" viewBox="-1 -5 2 10" refX="-5" refY='0' orient="auto" markerWidth="2" markerHeight="14" xoverflow="visible" markerUnits="userSpaceOnUse">
+                            <line x1="0" y1="-6" x2="0" y2="6" stroke-width="4" stroke= "rgb(0, 82, 121)"></line>   
                         </marker>
                         <clipPath id="circlepath" clipPathUnits="objectBoundingBox">
                             <circle r=".5" cx=".5" cy=".5"></circle>
@@ -276,16 +302,66 @@ a
                 </div>
                 <div class="rd-rela-module" v-if="current!==null && current===currentRelationModule" >
                     <div class="title-bar">
-fffffffff
+                        <svg width="100%" height="40" viewBox="-100 0 200 50">
+                            <path :stroke-dasharray="currentRelationModule.style?currentRelationModule.style['stroke-dasharray']:''" :id="'rdl'+currentRelationModule.id" d="M -120 25 L 120 25" :stroke="currentRelationModule.style?currentRelationModule.style.stroke:'rgb(122, 252, 245)'" stroke-width="3" :marker-start="currentRelationModule.style?'url('+currentRelationModule.style['marker-start']+')':''" :marker-end="currentRelationModule.style?'url('+currentRelationModule.style['marker-end']+')':'url(#arrow)'"> </path>
+                            <text style="text-anchor:middle;stroke:white;">
+                                <textPath alignment-baseline="middle" startOffset="50%" :href="'#rdl'+currentRelationModule.id">{{currentRelationModule.labelName}}</textPath>
+                            </text>
+                        </svg>
                     </div>
                     <div class="type-props">
                         <div class="type-prop-item">
                             <div>
+                            <label for="m-rela-labelName">关系名称</label>
+                            </div>
+                            <input id="m-rela-labelName" v-model.trim="currentRelationModule.labelName"  placeholder="模板描述信息"></input>
+                        </div>
+                        <div class="type-prop-item">
+                            <div>
                             <label for="m-rela-describe">描述</label>
                             </div>
-                            <textarea id="m-rela--describe" v-model.trim="currentRelationModule.describe"  placeholder="请输入模板描述信息"></textarea>
+                            <textarea id="m-rela--describe" v-model.trim="currentRelationModule.describe"  placeholder="模板描述信息"></textarea>
                         </div>
-                     
+                        <div class="type-prop-item">
+                            <div>
+                            <label for="m-rela-style-color">颜色</label>
+                            </div>
+                            <input id="m-rela-style-color" v-model.trim="currentRelationModule.style.stroke"  placeholder="模板显示颜色"></input>
+                        </div>
+                        <div class="type-prop-item">
+                            <div>
+                            <label for="m-rela-style-dash">虚线</label>
+                            </div>
+                            <input id="m-rela-style-dash" v-model.trim="currentRelationModule.style['stroke-dasharray']"  placeholder="模板显示线条"></input>
+                        </div>
+                        <div class="type-prop-item">
+                            <div>
+                            <label for="m-rela-style-start-marker">开始标志</label>
+                            </div>
+                            <select v-model="currentRelationModule.style['marker-start']">
+                                <option value="#arrow">箭头</option>
+                                <option value="#arrowhole">空心箭头</option>
+                                <option value="#circle">圆环</option>
+                                <option value="#point">圆点</option>
+                                <option value="#singline">单竖线</option>
+                                <option value="#douline">双竖线</option>
+                            </select>
+                            <!-- <input id="m-rela-style-start-marker" v-model.trim="currentRelationModule.style['marker-start']"  placeholder="模板线条开始标志"></input> -->
+                        </div>
+                        <div class="type-prop-item">
+                            <div>
+                            <label for="m-rela-style-end-marker">结束标志</label>
+                            </div>
+                            <select v-model="currentRelationModule.style['marker-end']">
+                                <option value="#arrow">箭头</option>
+                                <option value="#arrowhole">空心箭头</option>
+                                <option value="#circle">圆环</option>
+                                <option value="#point">圆点</option>
+                                <option value="#singline">单竖线</option>
+                                <option value="#douline">双竖线</option>
+                            </select>
+                            <!-- <input id="m-rela-style-end-marker" v-model.trim="currentRelationModule.style['marker-end']"  placeholder="模板线条结束标志"></input> -->
+                        </div>
                     </div>
                     <div class="user-prop-controller">
                         <div id="add-rela-module-prop" @click="showPropBar()">
