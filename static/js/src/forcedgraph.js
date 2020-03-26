@@ -185,6 +185,7 @@ function genforceSimu(domid , ns , es ){
                     // if(app.currentRelationModule){
                     //     Object.assign(props, app.currentRelationModule.properties);
                     // }
+                    if(app.currentRelationModule)
                     for(let p in app.currentRelationModule.properties){
                         props[p] = app.currentRelationModule.properties[p].default;
                     }

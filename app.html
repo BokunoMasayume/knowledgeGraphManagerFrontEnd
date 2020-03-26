@@ -123,7 +123,7 @@
                         <file-tree-item v-for="file in getFileChildren(null)" :fileobj="file"></file-tree-item>
                     </div>
                 </div>
-                <div class="module"   v-if="ldrawerContent==='module'">
+                <div class="module"  @click="current= null;" v-if="ldrawerContent==='module'">
                     <!-- TODO  模板分类管理-->
                     <div class="modulegroup">
                         <div class="control-bar">
@@ -208,7 +208,7 @@
                     </div>
                 </div>
                 <div class="search" v-if="ldrawerContent==='search'">
-a
+
                 </div>
             </div>
             </transition>
@@ -339,6 +339,7 @@ a
                             <label for="m-rela-style-start-marker">开始标志</label>
                             </div>
                             <select v-model="currentRelationModule.style['marker-start']">
+                                <option value=""> 空 </option>
                                 <option value="#arrow">箭头</option>
                                 <option value="#arrowhole">空心箭头</option>
                                 <option value="#circle">圆环</option>
@@ -353,6 +354,7 @@ a
                             <label for="m-rela-style-end-marker">结束标志</label>
                             </div>
                             <select v-model="currentRelationModule.style['marker-end']">
+                                <option value=""> 空 </option>
                                 <option value="#arrow">箭头</option>
                                 <option value="#arrowhole">空心箭头</option>
                                 <option value="#circle">圆环</option>
