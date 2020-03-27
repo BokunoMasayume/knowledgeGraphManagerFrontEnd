@@ -1,5 +1,7 @@
 # KG 知识图谱可视化构建工具
 
+![](./static/screenshot.png)
+
 ## 使用说明
 - `ctrl+shift+s` 保存当前文件的所有修改
 - `ctrl+左键点击关系/节点` 唤起菜单
