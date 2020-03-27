@@ -32,7 +32,7 @@ server.on("request" , function(request , response){
 
 	if(parsedUrl.pathname=='/' ){//index page
 		// fs.readFile('./style.html' ,function(err,data){
-		fs.readFile('./vuel.html' ,function(err,data){
+		fs.readFile('./app.html' ,function(err,data){
 			if(err){
 				response.writeHead(500,{"Content-Type":"text/plain"});
 				response.end("error");
