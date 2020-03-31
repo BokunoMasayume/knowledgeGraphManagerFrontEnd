@@ -84,7 +84,6 @@ function ticked(){
                 let dy = (d.target.y - d.source.y);
 
                 let dis = Math.sqrt(dx*dx+dy*dy);
-                // console.log(midx+d.multipleLineIndex*symbol*100*dx/dis);
 
                 let mx = midx-d.multipleLineIndex*symbol*40*dy/dis;
                 let my = midy+d.multipleLineIndex*symbol*40*dx/dis;
@@ -399,6 +398,7 @@ function updateSimu(gnodes, gedges , rerender){
  * will also change the origin data?
  * @param {object} node - the node to be insert in the graph
  */
+let preTime = - new Date().getTime();;
 function insertNode(node){
     let flag=false;
     nodes.forEach(d=>{
@@ -411,10 +411,15 @@ function insertNode(node){
         return;
     }
     node.id=- new Date().getTime();
-
+    if(preTime <= node.id){
+        node.id = -- preTime;
+        // console.log("-----node.id=",node.id);
+    }
     
     nodes.push(node);
     updateSimu(nodes,edges);
+
+    return node;
 }
 /**
  * will also change the origin data?
@@ -437,6 +442,8 @@ function deleNode(nodeid){
   * 
   * @param {object} edge - edge object will be inserted
   */
+let preTimeE = - new Date().getTime();;
+
 function insertEdge(edge){
     let flag=false;
     edges.forEach(d=>{
@@ -449,10 +456,12 @@ function insertEdge(edge){
         return;
     }
     edge.relaUnit.id=- new Date().getTime();
+    if(preTimeE <= edge.relaUnit.id){edge.relaUnit.id = -- preTimeE;}
+
     edges.push(edge);
 
     updateSimu(nodes,edges);
-
+    return edge;
 }
 /**
  * will also change the origin data?

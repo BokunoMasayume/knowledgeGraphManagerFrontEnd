@@ -45,6 +45,10 @@
             <div class="title">
                 <div class="title-content">
                     {{currentFile?currentFile.fileName:"尚未选择文件"}}
+                    <div class="ex_import">
+                        <input @change="uploadcsv($event)" class="upload-file" type="file" accept=".csv" style="height:40px;">
+                        
+                    </div>
                 </div>
                 <div class="userinfo">
                     <div class="username">
@@ -326,7 +330,7 @@
                             <div>
                             <label for="m-rela-style-color">颜色</label>
                             </div>
-                            <input id="m-rela-style-color" v-model.trim="currentRelationModule.style.stroke"  placeholder="模板显示颜色"></input>
+                            <input id="m-rela-style-color" type="color" v-model.trim="currentRelationModule.style.stroke"  placeholder="模板显示颜色"></input>
                         </div>
                         <div class="type-prop-item">
                             <div>

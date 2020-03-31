@@ -14,6 +14,7 @@ addFileBar.addEventListener('click',function(e){
 })
 let input = document.createElement('input')
 input.setAttribute('type' , 'text');
+input.setAttribute("placeholder","请输入文件名")
 input.addEventListener('change' , function(e){
     app.appendFile(e.target.value.trim());
 })
@@ -27,6 +28,7 @@ addFolderBar.addEventListener('click',function(e){
     e.stopPropagation();
 })
 let input2 = document.createElement('input')
+input2.setAttribute("placeholder","请输入文件夹名")
 input2.setAttribute('type' , 'text');
 input2.addEventListener('change',function(e){
     app.appendFolder(e.target.value.trim());
@@ -37,6 +39,7 @@ addFolderBar.appendChild(input2);
 window.addPropBar = document.createElement('div')
 addPropBar.setAttribute('id','add-prop-bar');
 let input3 = document.createElement('input');
+input3.setAttribute("placeholder","请输入属性名")
 input3.setAttribute('type' , 'text');
 input3.addEventListener('change',function(e){
     console.log("changed prop",e.target.value.trim());
@@ -48,6 +51,7 @@ addPropBar.appendChild(input3);
 window.addModulegroupBar = document.createElement('div');
 addModulegroupBar.setAttribute('id','add-modulegroup-bar');
 let input4 = document.createElement('input');
+input4.setAttribute("placeholder","请输入模板类别名")
 input4.setAttribute('type','text');
 input4.addEventListener('change', function(e){
     app.postModulegroup(e.target.value.trim());
@@ -397,7 +401,66 @@ window.app = new Vue({
                 alert("上传文件失败");
             })
         },
+        uploadcsv:function(e){
+            if(this.currentFile == null){
+                alert("请先选择文件");
+                return;
+            }
 
+            let fr = new FileReader();
+            fr.onload = function(e){
+                let res = e.target.result.split("\n");
+                res = res.map(e=>e.split(","));
+                let map = {};
+                res.forEach(e=>{
+                    if(e.length!=3)return;
+                    if(!map[e[0]]){
+                        map[e[0]] = forcedgraph.insertNode({
+                            id:-1,
+                            labels:[e[0]],
+                            mainLabel:e[0],
+                            properties:{}
+                        })
+                    } 
+                    if(!map[e[1]]){
+                        map[e[1]] = forcedgraph.insertNode({
+                            id:-1,
+                            labels:[e[1]],
+                            mainLabel:e[1],
+                            properties:{}
+                        })
+                    } 
+
+                    forcedgraph.insertEdge({
+                        source: map[e[0]].id,
+                        target: map[e[1]].id,
+                        relaUnit:{
+                            id:-1,
+                            relationName:e[2],
+                            properties:{}
+                        }
+                    })
+                });
+
+                
+            }
+            fr.readAsText(e.target.files[0]);
+        },
+        exportFile:function(){
+            if(!this.currentFile){
+                alert("请先选择文件");
+                return;
+            }
+            let csv = "";
+            this.graph.relations.forEach(e=>{
+                csv += `${e.source.mainLabel},${e.target.mainLabel},${e.relaUnit.relationName}\n`
+            });
+            let a = document.createElement('a');
+            //TODO utf8,\ufeff       ????
+            a.href = "data:text/csv;charset=utf-8,"+encodeURIComponent(csv);
+            a.download = this.currentFile.fileName+".csv";
+            a.click();
+        },
         appendNodeLabel:function(e){
             this.currentNode.labels.push(e.target.value);
         },
@@ -782,7 +845,7 @@ window.app = new Vue({
                         relaprolis.push( requireHandler.graph.rela.patchOne(this.currentFile.id , rela.relaUnit.id, {
                             // source: rela.source.id,
                             // target: rela.target.id,
-                            // relaUnit: rela.relaUnit
+                            // relaUnit: rela.relaUnit,
                             relationName: rela.relaUnit.relationName,
                             properties: rela.relaUnit.properties
                         })  );
@@ -1016,6 +1079,13 @@ document.body.addEventListener('keyup' , function(e){
     console.log("keyup",e)
     if(e.ctrlKey && e.shiftKey && e.code=='KeyS'){
         app.saveAll();
+    }
+})
+
+document.body.addEventListener('keyup' , function(e){
+    console.log("keyup",e)
+    if(e.ctrlKey && e.shiftKey && e.code=='KeyE'){
+        app.exportFile();
     }
 })
 
